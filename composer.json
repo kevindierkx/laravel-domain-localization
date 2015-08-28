@@ -1,0 +1,21 @@
+{
+    "name": "kevindierkx/laravel-domain-localization",
+    "description": "Laravel domain localization",
+    "keywords": ["kevindierkx", "domain", "localization"],
+    "authors": [
+        {
+            "name": "Kevin Dierkx",
+            "email": "contact@kevindierkx.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kevindierkx\\LaravelDomainLocalization\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
