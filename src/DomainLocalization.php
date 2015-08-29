@@ -37,7 +37,6 @@ class DomainLocalization
      * @param  \Illuminate\Config\Repository       $configRepository
      * @param  \Illuminate\Http\Request            $request
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
      */
     public function __construct(
@@ -60,9 +59,7 @@ class DomainLocalization
         $this->defaultLocale = $this->configRepository->get('app.locale');
         $this->supportedLocales = $this->configRepository->get('laravel-domain-localization::supported_locales');
 
-        if (! $this->hasSupportedLocale($this->getDefaultLocale())) {
-            throw new UnsupportedLocaleException("Laravel's default locale is not in the supported locales array.");
-        }
+        $this->validateLocale($this->defaultLocale);
     }
 
     /**
@@ -109,7 +106,7 @@ class DomainLocalization
      * Get a supported locale.
      *
      * @param  string  $key
-     * @return string|null
+     * @return array|null
      */
     public function getSupportedLocale($key)
     {
@@ -175,5 +172,143 @@ class DomainLocalization
     public function getTld()
     {
         return substr(strrchr($this->request->getHttpHost(), '.'), 0);
+    }
+
+    /**
+     * Returns the current URL adapted to $locale.
+     *
+     * @param  string  $locale
+     * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
+     * @return string
+     */
+    public function getLocalizedUrl($locale)
+    {
+        // We validate the supplied locale before we mutate the current URL
+        // to make sure the locale exists and we don't return an invalid URL.
+        $this->validateLocale($locale);
+
+        return str_replace(
+            $this->getTld(),
+            $this->getTldForLocale($locale),
+            $this->request->getUri()
+        );
+    }
+
+    /**
+     * Get tld for current locale.
+     *
+     * @return string|null
+     */
+    public function getTldForCurrentLocale()
+    {
+        return $this->getTldForLocale($this->getCurrentLocale());
+    }
+
+    /**
+     * Get name for current locale.
+     *
+     * @return string|null
+     */
+    public function getNameForCurrentLocale()
+    {
+        return $this->getNameForLocale($this->getCurrentLocale());
+    }
+
+    /**
+     * Get direction for current locale.
+     *
+     * @return string|null
+     */
+    public function getDirectionForCurrentLocale()
+    {
+        return $this->getDirectionForLocale($this->getCurrentLocale());
+    }
+
+    /**
+     * Get script for current locale.
+     *
+     * @return string|null
+     */
+    public function getScriptForCurrentLocale()
+    {
+        return $this->getScriptForLocale($this->getCurrentLocale());
+    }
+
+    /**
+     * Get native for current locale.
+     *
+     * @return string|null
+     */
+    public function getNativeForCurrentLocale()
+    {
+        return $this->getNativeReadingForLocale($this->getCurrentLocale());
+    }
+
+    /**
+     * Get tld for locale.
+     *
+     * @param  string  $locale
+     * @return string|null
+     */
+    public function getTldForLocale($locale)
+    {
+        return $this->getSupportedLocale($locale)['tld'];
+    }
+
+    /**
+     * Get name for locale.
+     *
+     * @param  string  $locale
+     * @return string|null
+     */
+    public function getNameForLocale($locale)
+    {
+        return $this->getSupportedLocale($locale)['name'];
+    }
+
+    /**
+     * Get direction for locale.
+     *
+     * @param  string  $locale
+     * @return string|null
+     */
+    public function getDirectionForLocale($locale)
+    {
+        return $this->getSupportedLocale($locale)['direction'];
+    }
+
+    /**
+     * Get script for locale.
+     *
+     * @param  string  $locale
+     * @return string|null
+     */
+    public function getScriptForLocale($locale)
+    {
+        return $this->getSupportedLocale($locale)['script'];
+    }
+
+    /**
+     * Get native for locale.
+     *
+     * @param  string  $locale
+     * @return string|null
+     */
+    public function getNativeForLocale($locale)
+    {
+        return $this->getSupportedLocale($locale)['native'];
+    }
+
+    /**
+     * Validate the locale exists in the supported locales array.
+     *
+     * @param  string  $locale
+     * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
+     */
+    protected function validateLocale($locale)
+    {
+        if (! $this->hasSupportedLocale($locale)) {
+            throw new UnsupportedLocaleException("The locale [$locale] is not in the supported locales array.");
+        }
     }
 }
