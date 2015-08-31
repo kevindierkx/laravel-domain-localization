@@ -67,7 +67,7 @@ class DomainLocalization
      *
      * @return string
      */
-    public function getLocale()
+    public function getCurrentLocale()
     {
         return $this->app->getLocale();
     }
@@ -77,7 +77,7 @@ class DomainLocalization
      *
      * @param  string  $locale
      */
-    public function setLocale($locale)
+    public function setCurrentLocale($locale)
     {
         $this->app->setLocale($locale);
     }
