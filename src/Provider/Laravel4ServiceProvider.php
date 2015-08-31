@@ -47,7 +47,7 @@ class Laravel4ServiceProvider extends ServiceProvider
             $tld = $app['domain.localization']->getTld();
 
             if (! is_null($locale = $app['domain.localization']->getSupportedLocaleNameByTld($tld))) {
-                $app['domain.localization']->setLocale($locale);
+                $app['domain.localization']->setCurrentLocale($locale);
             }
         });
     }
