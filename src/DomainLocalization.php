@@ -241,7 +241,7 @@ class DomainLocalization
      */
     public function getNativeForCurrentLocale()
     {
-        return $this->getNativeReadingForLocale($this->getCurrentLocale());
+        return $this->getNativeForLocale($this->getCurrentLocale());
     }
 
     /**
