@@ -171,7 +171,19 @@ class DomainLocalization
      */
     public function getTld()
     {
-        return substr(strrchr($this->request->getHttpHost(), '.'), 0);
+        $host = $this->request->getHttpHost();
+
+        // Try to match the locale using the supported locales.
+        // We do it this way to support non standard tld combinations like '.es.dev'.
+        foreach ($this->supportedLocales as $locale) {
+            if (isset($locale['tld']) && strpos($host, $locale['tld']) !== false) {
+                return $locale['tld'];
+            }
+        }
+
+        // When we don't match anything the locale might not be configured.
+        // We fallback to returning the last item after the last period.
+        return substr(strrchr($host, '.'), 0);
     }
 
     /**
