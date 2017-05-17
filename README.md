@@ -4,65 +4,42 @@ A tool for easy i18n domain based localization in Laravel applications.
 ## Installation
 _This package is build for [Laravel framework](http://laravel.com) based applications._
 
-### Requirements
-- PHP >= 5.4.0
-- Laravel 4.2+
+For Laravel 4.2+ please refer to [version 1.0](https://github.com/kevindierkx/laravel-domain-localization/tree/1.0).
 
-### Composer installation
-You must modify your `composer.json` file and run `composer update` to include the latest version of the package in your project:
-
-```json
-"require": {
-    "kevindierkx/laravel-domain-localization": "1.0.*"
-}
-```
-
-Or you can run the `composer require` command from your terminal:
+### Laravel 5.x
+Require this package with composer:
 
 ```
-composer require kevindierkx/laravel-domain-localization:1.0.x
+composer require kevindierkx/laravel-domain-localization
 ```
 
 ### Service provider
-Open `app/config/app.php` and register the required service provider.
+Open `config/app.php` and register the required service provider.
 
 ```php
 'providers' => [
-    'Kevindierkx\LaravelDomainLocalization\Provider\Laravel4ServiceProvider',
+    ...
+    Kevindierkx\LaravelDomainLocalization\Provider\LaravelServiceProvider::class,
 ]
 ```
 
-If you'd like to make configuration changes in the configuration file you can publish it with the following Artisan command:
+If you'd like to make configuration changes, you can publish it with the following Artisan command:
 
 ```
-php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\Provider\Laravel4ServiceProvider"
+php artisan vendor:publish --tag=config
 ```
 
-### Facade
-The facade is used for easy access to the domain localization helper. If you would like to use the facade you need to open `app/config/app.php` and register the facade in the aliases array.
+## Middleware
+The Laravel Domain Localization uses the URL given for the request. In order to achieve this purpose it uses a middleware, to utilize the middleware add the following to you middleware array in `app\Http\Kernel.php`:
 
-```php
-'aliases' => [
-    'Localization' => 'Kevindierkx\LaravelDomainLocalization\Facade\DomainLocalization',
-]
+```
+protected $middleware = [
+    ...
+    \Kevindierkx\LaravelDomainLocalization\Middleware\SetupLocaleMiddleware::class,
+];
 ```
 
-## Usage
-The Laravel Domain Localization uses the URL given for the request. In order to achieve this purpose it uses a filter, to utilize the filter a route group should be added into the `app/routes.php` file. It will filter all pages that should be localized.
-
-```php
-Route::group([
-    'before' => 'domain.locale'
-], function() {
-
-    // Localized routes should go here.
-
-});
-
-// Other routes not triggering the localization filter go here.
-```
-
-Once this route group is added to the routes file, the user can access all locales added into `supported_locales` ('en' by default, look at the config section to change the supported locales).
+Once this middleware is enabled, the user can access all the locales defined in the `supported_locales` array ('en' by default, look at the config section to change the supported locales).
 
 For example, when you add the dutch locale `nl` the user could access two different locales, using the following addresses:
 
@@ -71,7 +48,19 @@ http://example.com
 http://example.nl
 ```
 
-If the locale is not defined in `supported_locales`, the system will use the application default locale.
+If the locale is not defined in `supported_locales` array, the system will use the applications default locale.
+
+Incase you only want to use domain localization on specific routes you could use the middleware groups or route middlewares instead.
+
+## Facade
+The facade is used for easy access to the domain localization helper. If you would like to use the facade you need to open `config/app.php` and register the facade in the aliases array.
+
+```php
+'aliases' => [
+    ...
+    'Localization' => 'Kevindierkx\LaravelDomainLocalization\Facade\DomainLocalization',
+]
+```
 
 ## Helpers
 The package provides some useful helper functions. For a full list of methods and method descriptions please refer to the [DomainLocalization class](https://github.com/kevindierkx/laravel-domain-localization/blob/master/src/DomainLocalization.php).
