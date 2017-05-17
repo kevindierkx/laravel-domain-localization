@@ -57,7 +57,7 @@ class DomainLocalization
     protected function boot()
     {
         $this->defaultLocale = $this->configRepository->get('app.locale');
-        $this->supportedLocales = $this->configRepository->get('laravel-domain-localization::supported_locales');
+        $this->supportedLocales = $this->configRepository->get('domain-localization.supported_locales');
 
         $this->validateLocale($this->defaultLocale);
     }
