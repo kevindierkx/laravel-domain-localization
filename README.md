@@ -58,7 +58,7 @@ The facade is used for easy access to the domain localization helper. If you wou
 ```php
 'aliases' => [
     ...
-    'Localization' => 'Kevindierkx\LaravelDomainLocalization\Facade\DomainLocalization',
+    'Localization' => Kevindierkx\LaravelDomainLocalization\Facade\DomainLocalization::class,
 ]
 ```
 
