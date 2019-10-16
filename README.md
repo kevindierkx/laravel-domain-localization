@@ -86,25 +86,18 @@ Returns a supported currently configured locale by 'name'.
 {{ Localization::getSupportedLocale('en') }}
 ```
 
-### Determine a supported locale exists
-Determines a supported currently configured locale exists by 'name'.
+### Determine if a locale exists
+Determines if the locale is configured by 'name'.
 
 ```php
 {{ Localization::hasSupportedLocale('en') }}
 ```
 
-### Get supported locale by TLD
-Returns a supported currently configured locale 'name' by top level domain.
+### Resolve a locale config by TLD
+Returns a locale config by its TLD, when no config matches the TLD `null` will be returned.
 
 ```php
 {{ Localization::getSupportedLocaleByTld('.com') }}
-```
-
-### Get supported locale 'name' by TLD
-Returns a supported currently configured locale by top level domain.
-
-```php
-{{ Localization::getSupportedLocaleNameByTld('.com') }}
 ```
 
 ### Get attributes from the current locale
