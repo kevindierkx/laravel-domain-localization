@@ -139,7 +139,7 @@ class DomainLocalization
      */
     public function getSupportedLocaleByTld(string $tld) :? array
     {
-        if (! is_null($key = $this->getSupportedLocaleNameByTld($tld))) {
+        if (! is_null($key = $this->resolveLocaleByTld($tld))) {
             return $this->supportedLocales[$key];
         }
     }
@@ -150,13 +150,15 @@ class DomainLocalization
      * @param  string  $tld
      * @return string|null
      */
-    public function getSupportedLocaleNameByTld(string $tld) : string
+    public function resolveLocaleByTld(string $tld) :? string
     {
         foreach ($this->supportedLocales as $key => $value) {
             if ($value['tld'] == $tld) {
                 return $key;
             }
         }
+
+        return null;
     }
 
     /**
@@ -167,7 +169,7 @@ class DomainLocalization
      */
     public function hasSupportedLocaleByTld(string $tld) : bool
     {
-        return ! is_null($this->getSupportedLocaleNameByTld($tld));
+        return ! is_null($this->resolveLocaleByTld($tld));
     }
 
     /**

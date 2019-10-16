@@ -6,14 +6,14 @@ use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
 class SetupLocaleMiddleware
 {
     /**
-     * @var DomainLocalization
+     * @var \Kevindierkx\LaravelDomainLocalization\DomainLocalization
      */
     protected $localization;
 
     /**
      * Create a new middleware instance.
      *
-     * @param  DomainLocalization  $localization
+     * @param  \Kevindierkx\LaravelDomainLocalization\DomainLocalization  $localization
      */
     public function __construct(DomainLocalization $localization)
     {
@@ -21,7 +21,7 @@ class SetupLocaleMiddleware
     }
 
     /**
-     * Handle middleware.
+     * Handle an incoming request.
      *
      * @param  mixed    $request
      * @param  Closure  $next
@@ -31,7 +31,7 @@ class SetupLocaleMiddleware
     {
         $tld = $this->localization->getTld();
 
-        if (! is_null($locale = $this->localization->getSupportedLocaleNameByTld($tld))) {
+        if ($locale = $this->localization->getSupportedLocaleNameByTld($tld)) {
             $this->localization->setCurrentLocale($locale);
         }
 
