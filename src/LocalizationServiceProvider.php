@@ -1,9 +1,9 @@
-<?php namespace Kevindierkx\LaravelDomainLocalization\Provider;
+<?php namespace Kevindierkx\LaravelDomainLocalization;
 
 use Illuminate\Support\ServiceProvider;
 use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
 
-class LaravelServiceProvider extends ServiceProvider
+class LocalizationServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application events.

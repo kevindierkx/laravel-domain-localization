@@ -1,8 +1,8 @@
-<?php namespace Kevindierkx\LaravelDomainLocalization\Facade;
+<?php namespace Kevindierkx\LaravelDomainLocalization\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class DomainLocalization extends Facade
+class Localization extends Facade
 {
     /**
     * Get the registered name of the component.
