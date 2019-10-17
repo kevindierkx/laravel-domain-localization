@@ -100,6 +100,13 @@ Returns a locale config by its TLD, when no config matches the TLD `null` will b
 {{ Localization::getSupportedLocaleByTld('.com') }}
 ```
 
+### Resolve a locale name by TLD
+Returns the name for a configured locale based on its TLD, when no config matches the TLD `null` will be returned.
+
+```php
+{{ Localization::getSupportedLocaleNameByTld('.com') }}
+```
+
 ### Get attributes from the current locale
 Returns the attribute value of the current locale.
 
@@ -129,14 +136,14 @@ Returns the current top level domain.
 {{ Localization::getTld() }}
 ```
 
-### Get current locale
+### Get the active locale
 Returns the current locale.
 
 ```php
 {{ Localization::getCurrentLocale() }}
 ```
 
-### Set current locale
+### Set the active locale
 Sets the current locale.
 
 ```php

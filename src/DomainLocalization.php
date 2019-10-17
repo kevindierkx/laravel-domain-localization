@@ -1,25 +1,20 @@
-<?php namespace Kevindierkx\LaravelDomainLocalization;
+<?php
 
-use Illuminate\Config\Repository;
-use Illuminate\Foundation\Application;
+namespace Kevindierkx\LaravelDomainLocalization;
+
+use Closure;
 use Illuminate\Http\Request;
 
 class DomainLocalization
 {
+    use Concerns\HasLocaleConfigs;
+
     /**
+     * The default app locale.
+     *
      * @var string
      */
     protected $defaultLocale;
-
-    /**
-     * @var array
-     */
-    protected $supportedLocales = [];
-
-    /**
-     * @var \Illuminate\Config\Repository
-     */
-    protected $configRepository;
 
     /**
      * @var \Illuminate\Http\Request
@@ -27,68 +22,47 @@ class DomainLocalization
     protected $request;
 
     /**
-     * @var \Illuminate\Foundation\Application
+     * The callback for resolving the active locale.
+     *
+     * @var Closure
      */
-    protected $app;
+    protected $localeGetter;
 
     /**
-     * Creates new instance.
+     * The callback for setting the active locale.
+     *
+     * @var Closure
+     */
+    protected $localeSetter;
+
+    /**
+     * Creates a new domain localization instance.
      *
      * @param  \Illuminate\Config\Repository       $configRepository
      * @param  \Illuminate\Http\Request            $request
      * @param  \Illuminate\Foundation\Application  $app
-     * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
      */
     public function __construct(
-        Repository $configRepository,
-        Request $request,
-        Application $app
+        string $defaultLocale,
+        Closure $localeGetter,
+        Closure $localeSetter,
+        array $locales,
+        Request $request
     ) {
-        $this->configRepository = $configRepository;
+        $this->defaultLocale = $defaultLocale;
+
+        $this->localeGetter = $localeGetter;
+        $this->localeSetter = $localeSetter;
+
         $this->request = $request;
-        $this->app = $app;
 
-        $this->boot();
+        foreach ($locales as $name => $config) {
+            $this->addLocale($name, $config);
+        }
     }
 
     /**
-     * Boot the class and make sure the application has a supported default locale.
-     *
-     * @return void
-     */
-    protected function boot() : void
-    {
-        $this->defaultLocale = $this->configRepository->get('app.locale');
-        $this->supportedLocales = $this->configRepository->get('domain-localization.supported_locales');
-
-        $this->validateLocale($this->defaultLocale);
-    }
-
-    /**
-     * Get the current locale.
-     *
-     * @return string
-     */
-    public function getCurrentLocale() : string
-    {
-        return $this->app->getLocale();
-    }
-
-    /**
-     * Set the current locale.
-     *
-     * @param  string  $locale
-     * @return self
-     */
-    public function setCurrentLocale($locale) : self
-    {
-        $this->app->setLocale($locale);
-
-        return $this;
-    }
-
-    /**
-     * Get the default locale.
+     * Get the default application locale.
      *
      * @return string
      */
@@ -98,78 +72,26 @@ class DomainLocalization
     }
 
     /**
-     * Get an array of all supported locales.
+     * Get the active app locale.
      *
-     * @return array
+     * @return string
      */
-    public function getSupportedLocales() : array
+    public function getCurrentLocale() : string
     {
-        return $this->supportedLocales;
+        return call_user_func($this->localeGetter);
     }
 
     /**
-     * Get a supported locale.
+     * Set the active app locale.
      *
-     * @param  string  $key
-     * @return array|null
+     * @param  string  $locale
+     * @return self
      */
-    public function getSupportedLocale(string $key) :? array
+    public function setCurrentLocale($locale) : self
     {
-        if ($this->hasSupportedLocale($key)) {
-            return $this->supportedLocales[$key];
-        }
-    }
+        call_user_func($this->localeSetter, $locale);
 
-    /**
-     * Determine a supported locale exists.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function hasSupportedLocale(string $key) : bool
-    {
-        return isset($this->supportedLocales[$key]);
-    }
-
-    /**
-     * Get a supported locale by tld.
-     *
-     * @param  string  $tld
-     * @return array|null
-     */
-    public function getSupportedLocaleByTld(string $tld) :? array
-    {
-        if (! is_null($key = $this->resolveLocaleByTld($tld))) {
-            return $this->supportedLocales[$key];
-        }
-    }
-
-    /**
-     * Get a supported locale name by tld.
-     *
-     * @param  string  $tld
-     * @return string|null
-     */
-    public function resolveLocaleByTld(string $tld) :? string
-    {
-        foreach ($this->supportedLocales as $key => $value) {
-            if ($value['tld'] == $tld) {
-                return $key;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Determine a supported locale exists for the tld.
-     *
-     * @param  string  $tld
-     * @return bool
-     */
-    public function hasSupportedLocaleByTld(string $tld) : bool
-    {
-        return ! is_null($this->resolveLocaleByTld($tld));
+        return $this;
     }
 
     /**
@@ -212,123 +134,5 @@ class DomainLocalization
             $this->getTldForLocale($locale),
             $this->request->getUri()
         );
-    }
-
-    /**
-     * Get tld for current locale.
-     *
-     * @return string
-     */
-    public function getTldForCurrentLocale() : string
-    {
-        return $this->getTldForLocale($this->getCurrentLocale());
-    }
-
-    /**
-     * Get name for current locale.
-     *
-     * @return string
-     */
-    public function getNameForCurrentLocale() : string
-    {
-        return $this->getNameForLocale($this->getCurrentLocale());
-    }
-
-    /**
-     * Get direction for current locale.
-     *
-     * @return string
-     */
-    public function getDirectionForCurrentLocale() : string
-    {
-        return $this->getDirectionForLocale($this->getCurrentLocale());
-    }
-
-    /**
-     * Get script for current locale.
-     *
-     * @return string
-     */
-    public function getScriptForCurrentLocale() : string
-    {
-        return $this->getScriptForLocale($this->getCurrentLocale());
-    }
-
-    /**
-     * Get native for current locale.
-     *
-     * @return string
-     */
-    public function getNativeForCurrentLocale() : string
-    {
-        return $this->getNativeForLocale($this->getCurrentLocale());
-    }
-
-    /**
-     * Get tld for locale.
-     *
-     * @param  string  $locale
-     * @return string
-     */
-    public function getTldForLocale($locale) : string
-    {
-        return $this->getSupportedLocale($locale)['tld'] ?? 'unknown';
-    }
-
-    /**
-     * Get name for locale.
-     *
-     * @param  string  $locale
-     * @return string
-     */
-    public function getNameForLocale($locale) : string
-    {
-        return $this->getSupportedLocale($locale)['name'] ?? 'unknown';
-    }
-
-    /**
-     * Get direction for locale.
-     *
-     * @param  string  $locale
-     * @return string
-     */
-    public function getDirectionForLocale($locale) : string
-    {
-        return $this->getSupportedLocale($locale)['dir'] ?? 'unknown';
-    }
-
-    /**
-     * Get script for locale.
-     *
-     * @param  string  $locale
-     * @return string
-     */
-    public function getScriptForLocale($locale) : string
-    {
-        return $this->getSupportedLocale($locale)['script'] ?? 'unknown';
-    }
-
-    /**
-     * Get native for locale.
-     *
-     * @param  string  $locale
-     * @return string
-     */
-    public function getNativeForLocale($locale) : string
-    {
-        return $this->getSupportedLocale($locale)['native'] ?? 'unknown';
-    }
-
-    /**
-     * Validate the locale exists in the supported locales array.
-     *
-     * @param  string  $locale
-     * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
-     */
-    protected function validateLocale($locale) : void
-    {
-        if (! $this->hasSupportedLocale($locale)) {
-            throw new UnsupportedLocaleException("The locale [$locale] is not in the supported locales array.");
-        }
     }
 }

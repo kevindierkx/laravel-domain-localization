@@ -1,7 +1,8 @@
-<?php namespace Kevindierkx\LaravelDomainLocalization;
+<?php
+
+namespace Kevindierkx\LaravelDomainLocalization;
 
 use Illuminate\Support\ServiceProvider;
-use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
 
 class LocalizationServiceProvider extends ServiceProvider
 {
@@ -10,11 +11,7 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $name = 'domain-localization';
-        $path = realpath(__DIR__."/../config/{$name}.php");
-
-        $this->publishes([$path => config_path("{$name}.php")], 'config');
-        $this->mergeConfigFrom($path, $name);
+        $this->setupConfig();
     }
 
     /**
@@ -22,13 +19,33 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('domain.localization', function ($app) {
+        $this->app->singleton(DomainLocalization::class, function ($app) {
             return new DomainLocalization(
-                $app['config'],
-                $app['request'],
-                $app
+                $app->getLocale(),
+                function () use ($app) {
+                    return $app->getLocale();
+                },
+                function ($locale) use ($app) {
+                    return $app->setLocale($locale);
+                },
+                config('domain-localization.supported_locales', []),
+                $app['request']
             );
         });
         $this->app->alias(DomainLocalization::class, 'domain.localization');
+    }
+
+    /**
+     * Setup the package configuration.
+     *
+     * @return void
+     */
+    protected function setupConfig()
+    {
+        $name = 'domain-localization';
+        $path = realpath(__DIR__."/../config/{$name}.php");
+
+        $this->publishes([$path => config_path("{$name}.php")], 'config');
+        $this->mergeConfigFrom($path, $name);
     }
 }

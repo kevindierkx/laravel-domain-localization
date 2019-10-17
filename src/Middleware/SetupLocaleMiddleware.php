@@ -1,4 +1,6 @@
-<?php namespace Kevindierkx\LaravelDomainLocalization\Middleware;
+<?php
+
+namespace Kevindierkx\LaravelDomainLocalization\Middleware;
 
 use Closure;
 use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
