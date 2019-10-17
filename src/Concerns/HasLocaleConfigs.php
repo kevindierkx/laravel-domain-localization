@@ -26,6 +26,46 @@ trait HasLocaleConfigs
     }
 
     /**
+     * Get an array of all supported locales.
+     *
+     * @return array
+     */
+    public function getSupportedLocales() : array
+    {
+        return $this->supportedLocales;
+    }
+
+    /**
+     * Get a supported locale.
+     *
+     * @param  string  $key
+     * @return array
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
+     */
+    public function getSupportedLocale(string $key) : array
+    {
+        if (! $this->hasSupportedLocale($key)) {
+            throw new UnsupportedLocaleException(sprintf(
+                'The locale \'%s\' is not in the `supported_locales` array.',
+                $key
+            ));
+        }
+
+        return $this->supportedLocales[$key];
+    }
+
+    /**
+     * Determine a supported locale exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function hasSupportedLocale(string $key) : bool
+    {
+        return isset($this->supportedLocales[$key]);
+    }
+
+    /**
      * Get tld for current locale.
      *
      * @return string
@@ -131,46 +171,6 @@ trait HasLocaleConfigs
     }
 
     /**
-     * Get an array of all supported locales.
-     *
-     * @return array
-     */
-    public function getSupportedLocales() : array
-    {
-        return $this->supportedLocales;
-    }
-
-    /**
-     * Get a supported locale.
-     *
-     * @param  string  $key
-     * @return array
-     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
-     */
-    public function getSupportedLocale(string $key) : array
-    {
-        if (! $this->hasSupportedLocale($key)) {
-            throw new UnsupportedLocaleException(sprintf(
-                'The locale \'%s\' is not in the `supported_locales` array.',
-                $key
-            ));
-        }
-
-        return $this->supportedLocales[$key];
-    }
-
-    /**
-     * Determine a supported locale exists.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function hasSupportedLocale(string $key) : bool
-    {
-        return isset($this->supportedLocales[$key]);
-    }
-
-    /**
      * Get a supported locale name by tld.
      *
      * @param  string  $tld
@@ -195,13 +195,14 @@ trait HasLocaleConfigs
      * Get a supported locale by tld.
      *
      * @param  string  $tld
-     * @return array|null
+     * @return array
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
      */
-    public function getSupportedLocaleByTld(string $tld) :? array
+    public function getSupportedLocaleByTld(string $tld) : array
     {
-        if (! is_null($key = $this->getSupportedLocaleNameByTld($tld))) {
-            return $this->supportedLocales[$key];
-        }
+        return $this->getSupportedLocale(
+            $this->getSupportedLocaleNameByTld($tld)
+        );
     }
 
     /**
@@ -212,6 +213,12 @@ trait HasLocaleConfigs
      */
     public function hasSupportedLocaleByTld(string $tld) : bool
     {
-        return ! is_null($this->getSupportedLocaleNameByTld($tld));
+        try {
+            $this->getSupportedLocaleNameByTld($tld);
+        } catch (UnsupportedLocaleException $e) {
+            return false;
+        }
+
+        return true;
     }
 }

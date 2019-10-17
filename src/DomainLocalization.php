@@ -104,9 +104,9 @@ class DomainLocalization
 
         // Try to match the locale using the supported locales.
         // We do it this way to support non standard tld combinations like '.es.dev'.
-        foreach ($this->supportedLocales as $locale) {
-            if (isset($locale['tld']) && strpos($host, $locale['tld']) !== false) {
-                return $locale['tld'];
+        foreach ($this->getSupportedLocales() as $config) {
+            if (isset($config['tld']) && strpos($host, $config['tld']) !== false) {
+                return $config['tld'];
             }
         }
 
@@ -135,11 +135,21 @@ class DomainLocalization
         );
     }
 
+    /**
+     * Resolve the URI from the request instance.
+     *
+     * @return string
+     */
     public static function resolveUri() : string
     {
         return static::$requestInstance->getUri();
     }
 
+    /**
+     * Resolve the HTTP host from the request instance.
+     *
+     * @return string
+     */
     public static function resolveHttpHost() : string
     {
         return static::$requestInstance->getHttpHost();
