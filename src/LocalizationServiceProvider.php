@@ -11,7 +11,17 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $app = $this->app;
+
         $this->setupConfig();
+
+        DomainLocalization::setLocaleGetter(function () use ($app) {
+            return $app->getLocale();
+        });
+        DomainLocalization::setLocaleSetter(function ($locale) use ($app) {
+            return $app->setLocale($locale);
+        });
+        DomainLocalization::setRequestInstance($app['request']);
     }
 
     /**
@@ -22,14 +32,7 @@ class LocalizationServiceProvider extends ServiceProvider
         $this->app->singleton(DomainLocalization::class, function ($app) {
             return new DomainLocalization(
                 $app->getLocale(),
-                function () use ($app) {
-                    return $app->getLocale();
-                },
-                function ($locale) use ($app) {
-                    return $app->setLocale($locale);
-                },
-                config('domain-localization.supported_locales', []),
-                $app['request']
+                config('domain-localization.supported_locales', [])
             );
         });
         $this->app->alias(DomainLocalization::class, 'domain.localization');

@@ -2,6 +2,8 @@
 
 namespace Kevindierkx\LaravelDomainLocalization\Concerns;
 
+use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
+
 trait HasLocaleConfigs
 {
     /**
@@ -142,13 +144,19 @@ trait HasLocaleConfigs
      * Get a supported locale.
      *
      * @param  string  $key
-     * @return array|null
+     * @return array
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
      */
-    public function getSupportedLocale(string $key) :? array
+    public function getSupportedLocale(string $key) : array
     {
-        if ($this->hasSupportedLocale($key)) {
-            return $this->supportedLocales[$key];
+        if (! $this->hasSupportedLocale($key)) {
+            throw new UnsupportedLocaleException(sprintf(
+                'The locale \'%s\' is not in the `supported_locales` array.',
+                $key
+            ));
         }
+
+        return $this->supportedLocales[$key];
     }
 
     /**
@@ -166,9 +174,10 @@ trait HasLocaleConfigs
      * Get a supported locale name by tld.
      *
      * @param  string  $tld
-     * @return string|null
+     * @return string
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
      */
-    public function getSupportedLocaleNameByTld(string $tld) :? string
+    public function getSupportedLocaleNameByTld(string $tld) : string
     {
         foreach ($this->supportedLocales as $key => $value) {
             if ($value['tld'] == $tld) {
@@ -176,7 +185,10 @@ trait HasLocaleConfigs
             }
         }
 
-        return null;
+        throw new UnsupportedLocaleException(sprintf(
+            'The TLD \'%s\' is not in the `supported_locales` array.',
+            $tld
+        ));
     }
 
     /**
