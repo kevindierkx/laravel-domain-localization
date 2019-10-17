@@ -4,6 +4,7 @@ namespace Kevindierkx\LaravelDomainLocalization;
 
 use Closure;
 use Illuminate\Http\Request;
+use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
 
 class DomainLocalization
 {
@@ -17,23 +18,25 @@ class DomainLocalization
     protected $defaultLocale;
 
     /**
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * The callback for resolving the active locale.
      *
      * @var Closure
      */
-    protected $localeGetter;
+    protected static $localeGetter;
 
     /**
      * The callback for setting the active locale.
      *
      * @var Closure
      */
-    protected $localeSetter;
+    protected static $localeSetter;
+
+    /**
+     * The request instance used for resolving URIs and TLDs.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    protected static $requestInstance;
 
     /**
      * Creates a new domain localization instance.
@@ -42,22 +45,18 @@ class DomainLocalization
      * @param  \Illuminate\Http\Request            $request
      * @param  \Illuminate\Foundation\Application  $app
      */
-    public function __construct(
-        string $defaultLocale,
-        Closure $localeGetter,
-        Closure $localeSetter,
-        array $locales,
-        Request $request
-    ) {
+    public function __construct(string $defaultLocale, array $locales)
+    {
         $this->defaultLocale = $defaultLocale;
-
-        $this->localeGetter = $localeGetter;
-        $this->localeSetter = $localeSetter;
-
-        $this->request = $request;
 
         foreach ($locales as $name => $config) {
             $this->addLocale($name, $config);
+        }
+
+        if (empty($this->supportedLocales[$defaultLocale])) {
+            throw new UnsupportedLocaleException(
+                'The default locale is not configured in the `supported_locales` array.'
+            );
         }
     }
 
@@ -78,7 +77,7 @@ class DomainLocalization
      */
     public function getCurrentLocale() : string
     {
-        return call_user_func($this->localeGetter);
+        return call_user_func(static::$localeGetter);
     }
 
     /**
@@ -89,7 +88,7 @@ class DomainLocalization
      */
     public function setCurrentLocale($locale) : self
     {
-        call_user_func($this->localeSetter, $locale);
+        call_user_func(static::$localeSetter, $locale);
 
         return $this;
     }
@@ -101,7 +100,7 @@ class DomainLocalization
      */
     public function getTld() : string
     {
-        $host = $this->request->getHttpHost();
+        $host = static::resolveHttpHost();
 
         // Try to match the locale using the supported locales.
         // We do it this way to support non standard tld combinations like '.es.dev'.
@@ -112,7 +111,7 @@ class DomainLocalization
         }
 
         // When we don't match anything the locale might not be configured.
-        // We fallback to returning the last item after the last period.
+        // We will default to the last item after the last period.
         return substr(strrchr($host, '.'), 0);
     }
 
@@ -132,7 +131,50 @@ class DomainLocalization
         return str_replace(
             $this->getTld(),
             $this->getTldForLocale($locale),
-            $this->request->getUri()
+            static::resolveUri()
         );
+    }
+
+    public static function resolveUri() : string
+    {
+        return static::$requestInstance->getUri();
+    }
+
+    public static function resolveHttpHost() : string
+    {
+        return static::$requestInstance->getHttpHost();
+    }
+
+    /**
+     * Set the locale getter closure.
+     *
+     * @param  Closure  $closure
+     * @return void
+     */
+    public static function setLocaleGetter(Closure $closure) : void
+    {
+        static::$localeGetter = $closure;
+    }
+
+    /**
+     * Set the locale setter closure.
+     *
+     * @param  Closure  $closure
+     * @return void
+     */
+    public static function setLocaleSetter(Closure $closure) : void
+    {
+        static::$localeSetter = $closure;
+    }
+
+    /**
+     * Set the request resolver closure.
+     *
+     * @param  \Illuminate\Http\Request  $instance
+     * @return void
+     */
+    public static function setRequestInstance(Request $request) : void
+    {
+        static::$requestInstance = $request;
     }
 }
