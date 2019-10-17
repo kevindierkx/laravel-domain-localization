@@ -17,7 +17,7 @@ return [
         // 'en-GB' => ['tld' => '.uk',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'British English',    'native' => 'British English'],
         // 'en-US' => ['tld' => '.us',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'U.S. English',       'native' => 'U.S. English'],
         // 'es'    => ['tld' => '.es',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'Spanish',            'native' => 'español'],
-        'nl'    => ['tld' => '.nl',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'Dutch',              'native' => 'Nederlands'],
+        // 'nl'    => ['tld' => '.nl',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'Dutch',              'native' => 'Nederlands'],
     ],
 
 ];

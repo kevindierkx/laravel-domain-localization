@@ -12,9 +12,20 @@
         "php": "^7.1.3",
         "illuminate/support": "~5.8|^6.0"
     },
+    "require-dev": {
+        "orchestra/testbench": "^4.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "autoload": {
         "psr-4": {
             "Kevindierkx\\LaravelDomainLocalization\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kevindierkx\\LaravelDomainLocalization\\Tests\\": "tests/src/"
         }
     },
     "extra": {
@@ -27,5 +38,6 @@
             }
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
