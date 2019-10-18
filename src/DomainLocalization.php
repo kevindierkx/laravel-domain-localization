@@ -102,12 +102,28 @@ class DomainLocalization
     {
         $host = static::resolveHttpHost();
 
+        $matches = [];
+
         // Try to match the locale using the supported locales.
-        // We do it this way to support non standard tld combinations like '.es.dev'.
+        // This way we can support non standard tld combinations like '.com.dev'.
         foreach ($this->getSupportedLocales() as $config) {
-            if (isset($config['tld']) && strpos($host, $config['tld']) !== false) {
-                return $config['tld'];
+            // We ensure the match is at the end of the string to prevent '.com'
+            // being matched on '.com.dev'.
+            if (
+                isset($config['tld'])
+                && strpos($host, $config['tld']) !== false
+                && strlen($host) - strlen($config['tld']) === strrpos($host, $config['tld'])
+            ) {
+                $matches[] = $config['tld'];
             }
+        }
+
+        // Multiple matches will be sorted on length, the best matching combination
+        // will be used as the correct match, ie: '.com.dev' vs '.dev'.
+        if (! empty($matches)) {
+            usort($matches, [$this, 'compareStrLength']);
+
+            return reset($matches);
         }
 
         // When we don't match anything the locale might not be configured.
@@ -116,21 +132,40 @@ class DomainLocalization
     }
 
     /**
+     * Resolve the length difference of two strings, used in the getTld method
+     * for comparing the best matching TLD. Negative results would push the
+     * item to the start since the TLD would be longer.
+     *
+     * @param  string  $a
+     * @param  string  $b
+     * @return int
+     */
+    protected function compareStrLength(string $a, string $b) : int
+    {
+        return strlen($b) - strlen($a);
+    }
+
+    /**
      * Returns the current URL adapted to $locale.
      *
-     * @param  string  $locale
+     * @param  string  $key
      * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
      * @return string
      */
-    public function getLocalizedUrl(string $locale) : string
+    public function getLocalizedUrl(string $key) : string
     {
         // We validate the supplied locale before we mutate the current URL
         // to make sure the locale exists and we don't return an invalid URL.
-        $this->validateLocale($locale);
+        if (! $this->hasSupportedLocale($key)) {
+            throw new UnsupportedLocaleException(sprintf(
+                'The locale \'%s\' is not in the `supported_locales` array.',
+                $key
+            ));
+        }
 
         return str_replace(
             $this->getTld(),
-            $this->getTldForLocale($locale),
+            $this->getTldForLocale($key),
             static::resolveUri()
         );
     }
