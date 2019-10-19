@@ -179,8 +179,8 @@ trait HasLocaleConfigs
      */
     public function getSupportedLocaleNameByTld(string $tld) : string
     {
-        foreach ($this->supportedLocales as $key => $value) {
-            if ($value['tld'] == $tld) {
+        foreach ($this->supportedLocales as $key => $config) {
+            if ($this->getTldForLocale($key) === $tld) {
                 return $key;
             }
         }

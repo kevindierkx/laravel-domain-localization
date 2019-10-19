@@ -4,6 +4,7 @@ namespace Kevindierkx\LaravelDomainLocalization;
 
 use Closure;
 use Illuminate\Http\Request;
+use Kevindierkx\LaravelDomainLocalization\Exceptions\InvalidUrlException;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
 
 class DomainLocalization
@@ -96,11 +97,19 @@ class DomainLocalization
     /**
      * Get top level domain.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    public function getTld() : string
+    public function getTldFromUrl(string $url) : string
     {
-        $host = static::resolveHttpHost();
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new InvalidUrlException(sprintf(
+                'The url \'%s\' could not be parsed, make sure you provide a full URL.',
+                $url
+            ));
+        }
+
+        $host = parse_url($url, PHP_URL_HOST);
 
         $matches = [];
 
@@ -146,14 +155,18 @@ class DomainLocalization
     }
 
     /**
-     * Returns the current URL adapted to $locale.
+     * Localize the URL to the provided locale key or to the default locale when
+     * no locale is provided.
      *
-     * @param  string  $key
+     * @param  string  $url
+     * @param  string|null  $key
      * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
      * @return string
      */
-    public function getLocalizedUrl(string $key) : string
+    public function getLocalizedUrl(string $url, string $key = null) : string
     {
+        $key = $key ?: $this->getDefaultLocale();
+
         // We validate the supplied locale before we mutate the current URL
         // to make sure the locale exists and we don't return an invalid URL.
         if (! $this->hasSupportedLocale($key)) {
@@ -164,30 +177,10 @@ class DomainLocalization
         }
 
         return str_replace(
-            $this->getTld(),
+            $this->getTldFromUrl($url),
             $this->getTldForLocale($key),
-            static::resolveUri()
+            $url
         );
-    }
-
-    /**
-     * Resolve the URI from the request instance.
-     *
-     * @return string
-     */
-    public static function resolveUri() : string
-    {
-        return static::$requestInstance->getUri();
-    }
-
-    /**
-     * Resolve the HTTP host from the request instance.
-     *
-     * @return string
-     */
-    public static function resolveHttpHost() : string
-    {
-        return static::$requestInstance->getHttpHost();
     }
 
     /**
@@ -210,16 +203,5 @@ class DomainLocalization
     public static function setLocaleSetter(Closure $closure) : void
     {
         static::$localeSetter = $closure;
-    }
-
-    /**
-     * Set the request resolver closure.
-     *
-     * @param  \Illuminate\Http\Request  $instance
-     * @return void
-     */
-    public static function setRequestInstance(Request $request) : void
-    {
-        static::$requestInstance = $request;
     }
 }

@@ -21,7 +21,6 @@ class LocalizationServiceProvider extends ServiceProvider
         DomainLocalization::setLocaleSetter(function ($locale) use ($app) {
             return $app->setLocale($locale);
         });
-        DomainLocalization::setRequestInstance($app['request']);
     }
 
     /**

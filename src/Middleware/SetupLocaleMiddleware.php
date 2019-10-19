@@ -31,7 +31,7 @@ class SetupLocaleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $tld = $this->localization->getTld();
+        $tld = $this->localization->getTldFromUrl($request->getUri());
 
         if ($locale = $this->localization->getSupportedLocaleNameByTld($tld)) {
             $this->localization->setCurrentLocale($locale);

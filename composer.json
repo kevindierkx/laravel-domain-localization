@@ -13,7 +13,7 @@
         "illuminate/support": "~5.8|^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.0"
+        "orchestra/testbench-browser-kit": "^4.2"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"

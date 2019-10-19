@@ -1,0 +1,7 @@
+<?php
+
+return [
+
+    'native' => 'English',
+
+];

@@ -4,7 +4,7 @@ namespace Kevindierkx\LaravelDomainLocalization\Tests;
 
 use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
 
-abstract class TestCase extends \Orchestra\Testbench\TestCase
+abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
 {
     const TEST_URL_EN = 'https://test.com';
 
@@ -61,7 +61,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application   $app
+     * @param  \Illuminate\Foundation\Application  $app
      *
      * @return void
      */
@@ -69,6 +69,25 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('app.locale', 'en');
         $app['config']->set('domain-localization.supported_locales', ['en' => self::TEST_EN_CONFIG]);
+
+        $app['translator']->getLoader()->addNamespace('DomainLocalizationTest', realpath(dirname(__FILE__)).'/../lang');
+        $app['translator']->load('DomainLocalizationTest', 'data', 'en');
+        $app['translator']->load('DomainLocalizationTest', 'data', 'nl');
+
+        $app['router']->group([
+            'middleware' => [
+                \Kevindierkx\LaravelDomainLocalization\Middleware\SetupLocaleMiddleware::class,
+            ],
+        ], function () use ($app) {
+            $app['router']->get('/test', ['as'=> 'test', function () use ($app) {
+                return $app['translator']->get('DomainLocalizationTest::data.native');
+            }, ]);
+        });
+    }
+
+    protected function refreshApplication()
+    {
+        parent::refreshApplication();
     }
 
     /**
