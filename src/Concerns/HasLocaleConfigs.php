@@ -14,6 +14,13 @@ trait HasLocaleConfigs
     protected $supportedLocales = [];
 
     /**
+     * Get the active app locale.
+     *
+     * @return string
+     */
+    abstract public function getCurrentLocale() : string;
+
+    /**
      * Add a locale config.
      *
      * @param  string  $name

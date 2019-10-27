@@ -19,7 +19,7 @@ class LocalizationServiceProvider extends ServiceProvider
             return $app->getLocale();
         });
         DomainLocalization::setLocaleSetter(function ($locale) use ($app) {
-            return $app->setLocale($locale);
+            $app->setLocale($locale);
         });
     }
 
