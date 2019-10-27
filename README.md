@@ -8,45 +8,32 @@
 
 A tool for easy i18n domain based localization in Laravel applications.
 
+For more advanced locale management take a look at [mcamara/laravel-localization](https://github.com/mcamara/laravel-localization).
+
 ## Installation
-_This package is build for [Laravel framework](http://laravel.com) based applications._
 
-For Laravel 4.2+ please refer to [version 1.0](https://github.com/kevindierkx/laravel-domain-localization/tree/1.0).
+Install the package via composer: `composer require kevindierkx/laravel-domain-localization`
 
-### Laravel 5.x
-Require this package with composer:
+*This package implements Laravel's Package Discovery, no further changes are needed to your application configs. For more information [please refer to the Laravel documentation](https://laravel.com/docs/packages#package-discovery).*
 
-```
-composer require kevindierkx/laravel-domain-localization
-```
+### Config
 
-### Service provider
-Open `config/app.php` and register the required service provider.
+In order to edit the default configuration you need to publish the package configuration to your application config directory:
+
+`php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\LocalizationServiceProvider"`
+
+The config file will be published in `config/domain-localization.php`. Here you can enable or change the supported locales. *Please note:* When a desired locale isn't present in the supported locales config an exception will be thrown.
+
+### Register Middleware
+
+The provided middleware enables dynamically setting the current application locale. To enable this behavior the middleware needs to be registered in the application's middleware array, found in the `app\Http\Kernel.php`:
 
 ```php
-'providers' => [
-    ...
-    Kevindierkx\LaravelDomainLocalization\Provider\LaravelServiceProvider::class,
-]
-```
-
-If you'd like to make configuration changes, you can publish it with the following Artisan command:
-
-```
-php artisan vendor:publish --tag=config
-```
-
-## Middleware
-The Laravel Domain Localization uses the URL given for the request. In order to achieve this purpose it uses a middleware, to utilize the middleware add the following to you middleware array in `app\Http\Kernel.php`:
-
-```
 protected $middleware = [
     ...
     \Kevindierkx\LaravelDomainLocalization\Middleware\SetupLocaleMiddleware::class,
 ];
 ```
-
-Once this middleware is enabled, the user can access all the locales defined in the `supported_locales` array ('en' by default, look at the config section to change the supported locales).
 
 For example, when you add the dutch locale `nl` the user could access two different locales, using the following addresses:
 
@@ -55,113 +42,200 @@ http://example.com
 http://example.nl
 ```
 
-If the locale is not defined in `supported_locales` array, the system will use the applications default locale.
+*Please note:* It is not required to use the middleware on all routes. The `Localization` service provides a variety of helper methods to resolve a matching locale from an URL.
 
-Incase you only want to use domain localization on specific routes you could use the middleware groups or route middlewares instead.
+## Usage
 
-## Facade
-The facade is used for easy access to the domain localization helper. If you would like to use the facade you need to open `config/app.php` and register the facade in the aliases array.
+The package provides some useful helper methods. For a full list of methods and method descriptions please refer to the [DomainLocalization class](https://github.com/kevindierkx/laravel-domain-localization/blob/master/src/DomainLocalization.php).
+
+*Please note:* By default the `Localization` facade will be registered during package discovery. In the following examples we will use this facade directly.
+
+### Get the localized URL
+
+By providing a valid URL and the desired locale you can automatically create a localized URL:
 
 ```php
-'aliases' => [
-    ...
-    'Localization' => Kevindierkx\LaravelDomainLocalization\Facade\DomainLocalization::class,
+Localization::getLocalizedUrl('https://example.com/page', 'nl');
+```
+
+Would return:
+
+```php
+https://example.nl/page
+```
+
+### Listing supported locale configs
+
+You can either list all configured locales:
+
+```php
+Localization::getSupportedLocales();
+```
+
+Would return:
+
+```php
+['en' => [
+    'tld' => '.com',
+    'script' => 'Latn',
+    'dir' => 'ltr',
+    'name' => 'English',
+    'native' => 'English'
+]]
+```
+
+Or list a specific locale by its name:
+
+```php
+Localization::getSupportedLocale('en');
+```
+
+Would return:
+
+```php
+[
+    'tld' => '.com',
+    'script' => 'Latn',
+    'dir' => 'ltr',
+    'name' => 'English',
+    'native' => 'English'
 ]
 ```
 
-## Helpers
-The package provides some useful helper functions. For a full list of methods and method descriptions please refer to the [DomainLocalization class](https://github.com/kevindierkx/laravel-domain-localization/blob/master/src/DomainLocalization.php).
-
-### Get current URL for a specified locale
-Uses the current URL to create a localized URL using the tld value from the config.
+Additionally you can simply check if a locale is configured:
 
 ```php
-{{ Localization::getLocalizedUrl('en') }}
+Localization::hasSupportedLocale('en');
 ```
 
-### Get supported locales
-Returns all the supported currently configured locales.
+Would return:
 
 ```php
-{{ Localization::getSupportedLocales() }}
+true
 ```
 
-### Get supported locale by 'name'
-Returns a supported currently configured locale by 'name'.
+### Resolving locale configs by TLD
+
+Instead of directly using the locale name to resolve a configuration you can also use the TLD:
 
 ```php
-{{ Localization::getSupportedLocale('en') }}
+Localization::getSupportedLocaleByTld('.com');
 ```
 
-### Determine if a locale exists
-Determines if the locale is configured by 'name'.
+Would return:
 
 ```php
-{{ Localization::hasSupportedLocale('en') }}
+[
+    'tld' => '.com',
+    'script' => 'Latn',
+    'dir' => 'ltr',
+    'name' => 'English',
+    'native' => 'English'
+]
 ```
 
-### Resolve a locale config by TLD
-Returns a locale config by its TLD, when no config matches the TLD `null` will be returned.
+Or resolve the locale name by TLD:
 
 ```php
-{{ Localization::getSupportedLocaleByTld('.com') }}
+Localization::getSupportedLocaleNameByTld('.com');
 ```
 
-### Resolve a locale name by TLD
-Returns the name for a configured locale based on its TLD, when no config matches the TLD `null` will be returned.
+Would return:
 
 ```php
-{{ Localization::getSupportedLocaleNameByTld('.com') }}
+'en'
 ```
 
-### Get attributes from the current locale
-Returns the attribute value of the current locale.
+And similar to the locale name you can check for the existence of a locale config by using its TLD:
 
 ```php
-{{ Localization::getTldForCurrentLocale() }}
-{{ Localization::getNameForCurrentLocale() }}
-{{ Localization::getDirectionForCurrentLocale() }}
-{{ Localization::getScriptForCurrentLocale() }}
-{{ Localization::getNativeForCurrentLocale() }}
+Localization::hasSupportedLocaleByTld('en');
 ```
 
-### Get attributes from a specified supported locale
-Returns the attribute value of a supported locale.
+Would return:
 
 ```php
-{{ Localization::getTldForLocale('en') }}
-{{ Localization::getNameForLocale('en') }}
-{{ Localization::getDirectionForLocale('en') }}
-{{ Localization::getScriptForLocale('en') }}
-{{ Localization::getNativeForLocale('en') }}
+true
 ```
 
-### Get current TLD
-Returns the current top level domain.
+### Resolving the TLD from an URL
+
+Preferably you wouldn't parse the URL without a lookup table to resolve the TLD. This due to the unusual format of some TLDs. A great package for parsing domains is [jeremykendall/php-domain-parser](https://github.com/jeremykendall/php-domain-parser).
+
+Luckily this package also supports parsing TLDs, matching them on the configured locales:
 
 ```php
-{{ Localization::getTld() }}
+Localization::getTldFromUrl('https://example.com.local');
 ```
 
-### Get the active locale
-Returns the current locale.
+Would return:
 
 ```php
-{{ Localization::getCurrentLocale() }}
+true
 ```
 
-### Set the active locale
-Sets the current locale.
+*Please note:* For this to work `.com.local` needs to be registered as TLD in the supported locales config. This is very effective during development where you can't point multiple domains to your local machine.
+
+### Get attributes from locales
+
+For the current locale or a specific locale you can resolve various configuration attributes using the following helpers:
 
 ```php
-{{ Localization::setCurrentLocale('en') }}
+Localization::getTldForCurrentLocale();
+Localization::getNameForCurrentLocale();
+Localization::getDirectionForCurrentLocale();
+Localization::getScriptForCurrentLocale();
+Localization::getNativeForCurrentLocale();
 ```
 
-### Get default locale
-Returns the applications default locale.
+```php
+Localization::getTldForLocale('en');
+Localization::getNameForLocale('en');
+Localization::getDirectionForLocale('en');
+Localization::getScriptForLocale('en');
+Localization::getNativeForLocale('en');
+```
+
+Would return:
 
 ```php
-{{ Localization::getDefaultLocale() }}
+'.com'
+'Latn'
+'ltr'
+'English'
+'English'
+```
+
+### Modifying the active locale
+
+When not using the middleware you might want to change the active locale manually:
+
+```php
+Localization::setCurrentLocale('en');
+```
+
+Or you might just want to check the currently set locale:
+
+```php
+Localization::getCurrentLocale();
+```
+
+Would return:
+
+```php
+'en'
+```
+
+During boot we also keep track of the default locale, this is the locale set in the `app.php` config file before any mutation have been made:
+
+```php
+Localization::getDefaultLocale();
+```
+
+Would return:
+
+```php
+'en'
 ```
 
 ## Creating a language selector
