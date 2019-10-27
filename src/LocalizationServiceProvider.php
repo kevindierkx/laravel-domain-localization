@@ -45,7 +45,7 @@ class LocalizationServiceProvider extends ServiceProvider
     protected function setupConfig()
     {
         $name = 'domain-localization';
-        $path = realpath(__DIR__."/../config/{$name}.php");
+        $path = realpath(__DIR__."/config/{$name}.php");
 
         $this->publishes([$path => config_path("{$name}.php")], 'config');
         $this->mergeConfigFrom($path, $name);
