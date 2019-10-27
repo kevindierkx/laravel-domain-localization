@@ -111,10 +111,26 @@ class DomainLocalization
 
         $host = parse_url($url, PHP_URL_HOST);
 
+        $matchingLocales = $this->resolveMatchingLocales($host);
+
+        // When we don't match anything the locale might not be configured.
+        // We will default to the last element after the final period.
+        return empty($matchingLocales)
+            ? substr(strrchr($host, '.'), 0)
+            : reset($matchingLocales);
+    }
+
+    /**
+     * Resolve and sort matching TLDs from the config.
+     * The best matching/longest will be first in the results.
+     *
+     * @param  string  $host
+     * @return array
+     */
+    protected function resolveMatchingLocales(string $host) : array
+    {
         $matches = [];
 
-        // Try to match the locale using the supported locales.
-        // This way we can support non standard tld combinations like '.com.dev'.
         foreach ($this->getSupportedLocales() as $config) {
             // We ensure the match is at the end of the string to prevent '.com'
             // being matched on '.com.dev'.
@@ -127,17 +143,11 @@ class DomainLocalization
             }
         }
 
-        // Multiple matches will be sorted on length, the best matching combination
-        // will be used as the correct match, ie: '.com.dev' vs '.dev'.
-        if (!empty($matches)) {
-            usort($matches, [$this, 'compareStrLength']);
+        // The best matching TLD will most likely be the longest, before we
+        // return the matches we sort them on size.
+        usort($matches, [$this, 'compareStrLength']);
 
-            return reset($matches);
-        }
-
-        // When we don't match anything the locale might not be configured.
-        // We will default to the last item after the last period.
-        return substr(strrchr($host, '.'), 0);
+        return $matches;
     }
 
     /**
