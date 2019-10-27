@@ -2,6 +2,7 @@
     "name": "kevindierkx/laravel-domain-localization",
     "description": "Laravel domain localization",
     "keywords": ["kevindierkx", "domain", "localization"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Kevin Dierkx",
