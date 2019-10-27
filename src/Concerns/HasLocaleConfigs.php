@@ -51,7 +51,7 @@ trait HasLocaleConfigs
      */
     public function getSupportedLocale(string $key) : array
     {
-        if (! $this->hasSupportedLocale($key)) {
+        if (!$this->hasSupportedLocale($key)) {
             throw new UnsupportedLocaleException(sprintf(
                 'The locale \'%s\' is not in the `supported_locales` array.',
                 $key

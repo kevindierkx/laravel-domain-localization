@@ -102,7 +102,7 @@ class DomainLocalization
      */
     public function getTldFromUrl(string $url) : string
     {
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new InvalidUrlException(sprintf(
                 'The url \'%s\' could not be parsed, make sure you provide a full URL.',
                 $url
@@ -129,7 +129,7 @@ class DomainLocalization
 
         // Multiple matches will be sorted on length, the best matching combination
         // will be used as the correct match, ie: '.com.dev' vs '.dev'.
-        if (! empty($matches)) {
+        if (!empty($matches)) {
             usort($matches, [$this, 'compareStrLength']);
 
             return reset($matches);
@@ -169,7 +169,7 @@ class DomainLocalization
 
         // We validate the supplied locale before we mutate the current URL
         // to make sure the locale exists and we don't return an invalid URL.
-        if (! $this->hasSupportedLocale($key)) {
+        if (!$this->hasSupportedLocale($key)) {
             throw new UnsupportedLocaleException(sprintf(
                 'The locale \'%s\' is not in the `supported_locales` array.',
                 $key
