@@ -22,7 +22,9 @@ In order to edit the default configuration you need to publish the package confi
 
 `php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\LocalizationServiceProvider"`
 
-The config file will be published in `config/domain-localization.php`. Here you can enable or change the supported locales. *Please note:* When a desired locale isn't present in the supported locales config an exception will be thrown.
+The config file will be published in `config/domain-localization.php`. Here you can enable or change the supported locales.
+
+*Please note:* When a desired locale isn't present in the supported locales config an exception will be thrown.
 
 ### Register Middleware
 
@@ -38,8 +40,8 @@ protected $middleware = [
 For example, when you add the dutch locale `nl` the user could access two different locales, using the following addresses:
 
 ```
-http://example.com
-http://example.nl
+https://example.com
+https://example.nl
 ```
 
 *Please note:* It is not required to use the middleware on all routes. The `Localization` service provides a variety of helper methods to resolve a matching locale from an URL.
@@ -226,7 +228,7 @@ Would return:
 'en'
 ```
 
-During boot we also keep track of the default locale, this is the locale set in the `app.php` config file before any mutation have been made:
+During boot we also keep track of the default locale, this is the locale set in the `app.php` config file before any mutations have been made:
 
 ```php
 Localization::getDefaultLocale();
@@ -239,7 +241,7 @@ Would return:
 ```
 
 ## Creating a language selector
-Using the helper methods we can create a simple but effective language switcher. The example below uses a [Bootstrap dropdown](http://getbootstrap.com/components/#dropdowns).
+Using the helper methods we can create a simple but effective language switcher. The example below uses a [Bootstrap dropdown](https://getbootstrap.com/docs/3.4/components/#dropdowns).
 
 ```html
 ...
