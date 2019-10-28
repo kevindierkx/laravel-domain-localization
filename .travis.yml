@@ -10,6 +10,7 @@ before_script:
   - composer install --prefer-dist --no-interaction
 script:
   - composer phpunit
+  - vendor/bin/infection --threads=4 --min-covered-msi=80 --min-msi=80
 after_script:
     - wget https://scrutinizer-ci.com/ocular.phar
     - php ocular.phar code-coverage:upload --format=php-clover build/clover.xml

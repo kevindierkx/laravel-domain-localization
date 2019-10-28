@@ -14,7 +14,8 @@
         "illuminate/support": "~5.8 || ^6.0"
     },
     "require-dev": {
-        "orchestra/testbench-browser-kit": "^3.8 || ^4.2"
+        "orchestra/testbench-browser-kit": "^3.8 || ^4.2",
+        "infection/infection": "^0.14.2"
     },
     "scripts": {
         "phpunit": "phpunit --coverage-text"
