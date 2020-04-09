@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "php": "^7.1.3",
-        "illuminate/support": "~5.8 || ^6.0"
+        "php": "^7.2",
+        "illuminate/support": "^6.0 || ^7.0"
     },
     "require-dev": {
-        "orchestra/testbench-browser-kit": "^3.8 || ^4.2"
+        "orchestra/testbench-browser-kit": "^4.2 || ^5.0"
     },
     "scripts": {
         "phpunit": "phpunit --coverage-text"

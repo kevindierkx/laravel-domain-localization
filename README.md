@@ -10,6 +10,14 @@ A tool for easy i18n domain based localization in Laravel applications.
 
 For more advanced locale management take a look at [mcamara/laravel-localization](https://github.com/mcamara/laravel-localization).
 
+## Version Compatibility
+
+ Laravel  | Package
+:---------|:----------
+ 5.x      | >= 2.0
+ 6.x      | >= 3.0
+ 7.x      | >= 3.1
+
 ## Installation
 
 Install the package via composer: `composer require kevindierkx/laravel-domain-localization`
