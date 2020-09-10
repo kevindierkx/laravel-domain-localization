@@ -15,7 +15,7 @@ class SetupLocaleMiddleware
     /**
      * Create a new middleware instance.
      *
-     * @param  \Kevindierkx\LaravelDomainLocalization\DomainLocalization  $localization
+     * @param \Kevindierkx\LaravelDomainLocalization\DomainLocalization $localization
      */
     public function __construct(DomainLocalization $localization)
     {
@@ -25,8 +25,9 @@ class SetupLocaleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  mixed    $request
-     * @param  Closure  $next
+     * @param mixed   $request
+     * @param Closure $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)

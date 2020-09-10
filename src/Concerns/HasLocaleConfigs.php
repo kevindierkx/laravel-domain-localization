@@ -18,13 +18,14 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    abstract public function getCurrentLocale() : string;
+    abstract public function getCurrentLocale(): string;
 
     /**
      * Add a locale config.
      *
-     * @param  string  $name
-     * @param  array  $config
+     * @param string $name
+     * @param array  $config
+     *
      * @return void
      */
     public function addLocale($name, array $config)
@@ -37,7 +38,7 @@ trait HasLocaleConfigs
      *
      * @return array
      */
-    public function getSupportedLocales() : array
+    public function getSupportedLocales(): array
     {
         return $this->supportedLocales;
     }
@@ -45,13 +46,15 @@ trait HasLocaleConfigs
     /**
      * Get a supported locale.
      *
-     * @param  string  $key
-     * @return array
+     * @param string $key
+     *
      * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
+     *
+     * @return array
      */
-    public function getSupportedLocale(string $key) : array
+    public function getSupportedLocale(string $key): array
     {
-        if (!$this->hasSupportedLocale($key)) {
+        if (! $this->hasSupportedLocale($key)) {
             throw new UnsupportedLocaleException(sprintf(
                 'The locale \'%s\' is not in the `supported_locales` array.',
                 $key
@@ -64,10 +67,11 @@ trait HasLocaleConfigs
     /**
      * Determine a supported locale exists.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
-    public function hasSupportedLocale(string $key) : bool
+    public function hasSupportedLocale(string $key): bool
     {
         return isset($this->supportedLocales[$key]);
     }
@@ -77,7 +81,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getTldForCurrentLocale() : string
+    public function getTldForCurrentLocale(): string
     {
         return $this->getTldForLocale($this->getCurrentLocale());
     }
@@ -87,7 +91,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getNameForCurrentLocale() : string
+    public function getNameForCurrentLocale(): string
     {
         return $this->getNameForLocale($this->getCurrentLocale());
     }
@@ -97,7 +101,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getDirectionForCurrentLocale() : string
+    public function getDirectionForCurrentLocale(): string
     {
         return $this->getDirectionForLocale($this->getCurrentLocale());
     }
@@ -107,7 +111,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getScriptForCurrentLocale() : string
+    public function getScriptForCurrentLocale(): string
     {
         return $this->getScriptForLocale($this->getCurrentLocale());
     }
@@ -117,7 +121,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getNativeForCurrentLocale() : string
+    public function getNativeForCurrentLocale(): string
     {
         return $this->getNativeForLocale($this->getCurrentLocale());
     }
@@ -125,10 +129,11 @@ trait HasLocaleConfigs
     /**
      * Get tld for locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return string
      */
-    public function getTldForLocale($locale) : string
+    public function getTldForLocale($locale): string
     {
         return $this->getSupportedLocale($locale)['tld'] ?? 'unknown';
     }
@@ -136,10 +141,11 @@ trait HasLocaleConfigs
     /**
      * Get name for locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return string
      */
-    public function getNameForLocale($locale) : string
+    public function getNameForLocale($locale): string
     {
         return $this->getSupportedLocale($locale)['name'] ?? 'unknown';
     }
@@ -147,10 +153,11 @@ trait HasLocaleConfigs
     /**
      * Get direction for locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return string
      */
-    public function getDirectionForLocale($locale) : string
+    public function getDirectionForLocale($locale): string
     {
         return $this->getSupportedLocale($locale)['dir'] ?? 'unknown';
     }
@@ -158,10 +165,11 @@ trait HasLocaleConfigs
     /**
      * Get script for locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return string
      */
-    public function getScriptForLocale($locale) : string
+    public function getScriptForLocale($locale): string
     {
         return $this->getSupportedLocale($locale)['script'] ?? 'unknown';
     }
@@ -169,10 +177,11 @@ trait HasLocaleConfigs
     /**
      * Get native for locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return string
      */
-    public function getNativeForLocale($locale) : string
+    public function getNativeForLocale($locale): string
     {
         return $this->getSupportedLocale($locale)['native'] ?? 'unknown';
     }
@@ -180,11 +189,13 @@ trait HasLocaleConfigs
     /**
      * Get a supported locale name by tld.
      *
-     * @param  string  $tld
-     * @return string
+     * @param string $tld
+     *
      * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
+     *
+     * @return string
      */
-    public function getSupportedLocaleNameByTld(string $tld) : string
+    public function getSupportedLocaleNameByTld(string $tld): string
     {
         foreach ($this->supportedLocales as $key => $config) {
             if ($this->getTldForLocale($key) === $tld) {
@@ -201,11 +212,13 @@ trait HasLocaleConfigs
     /**
      * Get a supported locale by tld.
      *
-     * @param  string  $tld
-     * @return array
+     * @param string $tld
+     *
      * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
+     *
+     * @return array
      */
-    public function getSupportedLocaleByTld(string $tld) : array
+    public function getSupportedLocaleByTld(string $tld): array
     {
         return $this->getSupportedLocale(
             $this->getSupportedLocaleNameByTld($tld)
@@ -215,10 +228,11 @@ trait HasLocaleConfigs
     /**
      * Determine a supported locale exists for the tld.
      *
-     * @param  string  $tld
+     * @param string $tld
+     *
      * @return bool
      */
-    public function hasSupportedLocaleByTld(string $tld) : bool
+    public function hasSupportedLocaleByTld(string $tld): bool
     {
         try {
             $this->getSupportedLocaleNameByTld($tld);

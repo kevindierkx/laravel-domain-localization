@@ -1,23 +1,22 @@
 {
     "name": "kevindierkx/laravel-domain-localization",
     "description": "Laravel domain localization",
-    "keywords": ["kevindierkx", "domain", "localization"],
+    "keywords": ["distortedfusion", "laravel", "domain", "localization"],
     "license": "MIT",
     "authors": [
         {
             "name": "Kevin Dierkx",
-            "email": "contact@kevindierkx.com"
+            "email": "kevin@distortedfusion.com",
+            "homepage": "https://distortedfusion.com"
         }
     ],
     "require": {
         "php": "^7.2",
-        "illuminate/support": "^6.0 || ^7.0"
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0"
     },
     "require-dev": {
-        "orchestra/testbench-browser-kit": "^4.2 || ^5.0"
-    },
-    "scripts": {
-        "phpunit": "phpunit --coverage-text"
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "orchestra/testbench-browser-kit": "^4.2 || ^5.0 || ^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -28,6 +27,21 @@
         "psr-4": {
             "Kevindierkx\\LaravelDomainLocalization\\Tests\\": "tests/src/"
         }
+    },
+    "scripts": {
+        "phpcs-fix" : "php-cs-fixer fix --using-cache=no --allow-risky=yes --ansi",
+        "phpcs": "php-cs-fixer fix -v --diff --dry-run --allow-risky=yes --ansi",
+        "phpunit": "phpunit --coverage-text",
+        "test": [
+            "@phpcs",
+            "@phpstan",
+            "@phpunit"
+        ]
+    },
+    "scripts-descriptions": {
+        "phpcs": "Runs coding style test suite",
+        "phpunit": "Runs unit and function tests",
+        "test": "Runs all tests"
     },
     "extra": {
         "laravel": {

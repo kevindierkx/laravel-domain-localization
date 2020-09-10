@@ -2,8 +2,6 @@
 
 namespace Kevindierkx\LaravelDomainLocalization\Tests;
 
-use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
-
 abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
 {
     const TEST_URL_EN = 'https://test.com';
@@ -33,7 +31,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -47,7 +45,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     /**
      * Get package aliases.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -61,7 +59,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -79,9 +77,9 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
                 \Kevindierkx\LaravelDomainLocalization\Middleware\SetupLocaleMiddleware::class,
             ],
         ], function () use ($app) {
-            $app['router']->get('/test', ['as'=> 'test', function () use ($app) {
+            $app['router']->get('/test', ['as' => 'test', function () use ($app) {
                 return $app['translator']->get('DomainLocalizationTest::data.native');
-            }, ]);
+            }]);
         });
     }
 
@@ -93,13 +91,13 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     /**
      * Create fake request.
      *
-     * @param  string $uri
-     * @param  string $method
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
-     * @param  mixed  $content
+     * @param string $uri
+     * @param string $method
+     * @param array  $parameters
+     * @param array  $cookies
+     * @param array  $files
+     * @param array  $server
+     * @param mixed  $content
      *
      * @return \Illuminate\Http\Request
      */
@@ -111,9 +109,9 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
         $files = [],
         $server = ['CONTENT_TYPE' => 'application/json'],
         $content = null
-    )
-    {
-        $request = new \Illuminate\Http\Request;
+    ) {
+        $request = new \Illuminate\Http\Request();
+
         return $request->createFromBase(
             \Symfony\Component\HttpFoundation\Request::create(
                 $uri,

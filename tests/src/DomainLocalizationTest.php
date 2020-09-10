@@ -53,9 +53,9 @@ class DomainLocalizationTest extends TestCase
     }
 
     /**
-     * @param string  $a
-     * @param string  $b
-     * @param bool    $isPositive
+     * @param string $a
+     * @param string $b
+     * @param bool   $isPositive
      *
      * @dataProvider getCompareDataProvider
      */

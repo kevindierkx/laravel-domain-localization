@@ -42,9 +42,11 @@ class DomainLocalization
     /**
      * Creates a new domain localization instance.
      *
-     * @param  \Illuminate\Config\Repository       $configRepository
-     * @param  \Illuminate\Http\Request            $request
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Config\Repository      $configRepository
+     * @param \Illuminate\Http\Request           $request
+     * @param \Illuminate\Foundation\Application $app
+     * @param string                             $defaultLocale
+     * @param array                              $locales
      */
     public function __construct(string $defaultLocale, array $locales)
     {
@@ -66,7 +68,7 @@ class DomainLocalization
      *
      * @return string
      */
-    public function getDefaultLocale() : string
+    public function getDefaultLocale(): string
     {
         return $this->defaultLocale;
     }
@@ -76,7 +78,7 @@ class DomainLocalization
      *
      * @return string
      */
-    public function getCurrentLocale() : string
+    public function getCurrentLocale(): string
     {
         return call_user_func(static::$localeGetter);
     }
@@ -84,10 +86,11 @@ class DomainLocalization
     /**
      * Set the active app locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return self
      */
-    public function setCurrentLocale($locale) : self
+    public function setCurrentLocale($locale): self
     {
         call_user_func(static::$localeSetter, $locale);
 
@@ -97,12 +100,14 @@ class DomainLocalization
     /**
      * Get top level domain.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $url
+     *
      * @return string
      */
-    public function getTldFromUrl(string $url) : string
+    public function getTldFromUrl(string $url): string
     {
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
             throw new InvalidUrlException(sprintf(
                 'The url \'%s\' could not be parsed, make sure you provide a full URL.',
                 $url
@@ -124,10 +129,11 @@ class DomainLocalization
      * Resolve and sort matching TLDs from the config.
      * The best matching/longest will be first in the results.
      *
-     * @param  string  $host
+     * @param string $host
+     *
      * @return array
      */
-    protected function resolveMatchingLocales(string $host) : array
+    protected function resolveMatchingLocales(string $host): array
     {
         $matches = [];
 
@@ -155,11 +161,12 @@ class DomainLocalization
      * for comparing the best matching TLD. Negative results would push the
      * item to the start since the TLD would be longer.
      *
-     * @param  string  $a
-     * @param  string  $b
+     * @param string $a
+     * @param string $b
+     *
      * @return int
      */
-    protected function compareStrLength(string $a, string $b) : int
+    protected function compareStrLength(string $a, string $b): int
     {
         return strlen($b) - strlen($a);
     }
@@ -168,18 +175,20 @@ class DomainLocalization
      * Localize the URL to the provided locale key or to the default locale when
      * no locale is provided.
      *
-     * @param  string  $url
-     * @param  string|null  $key
+     * @param string      $url
+     * @param string|null $key
+     *
      * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
+     *
      * @return string
      */
-    public function getLocalizedUrl(string $url, string $key = null) : string
+    public function getLocalizedUrl(string $url, string $key = null): string
     {
         $key = $key ?: $this->getDefaultLocale();
 
         // We validate the supplied locale before we mutate the current URL
         // to make sure the locale exists and we don't return an invalid URL.
-        if (!$this->hasSupportedLocale($key)) {
+        if (! $this->hasSupportedLocale($key)) {
             throw new UnsupportedLocaleException(sprintf(
                 'The locale \'%s\' is not in the `supported_locales` array.',
                 $key
@@ -196,10 +205,11 @@ class DomainLocalization
     /**
      * Set the locale getter closure.
      *
-     * @param  Closure  $closure
+     * @param Closure $closure
+     *
      * @return void
      */
-    public static function setLocaleGetter(Closure $closure) : void
+    public static function setLocaleGetter(Closure $closure): void
     {
         static::$localeGetter = $closure;
     }
@@ -207,10 +217,11 @@ class DomainLocalization
     /**
      * Set the locale setter closure.
      *
-     * @param  Closure  $closure
+     * @param Closure $closure
+     *
      * @return void
      */
-    public static function setLocaleSetter(Closure $closure) : void
+    public static function setLocaleSetter(Closure $closure): void
     {
         static::$localeSetter = $closure;
     }

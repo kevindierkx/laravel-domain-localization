@@ -15,10 +15,10 @@ class LocalizationServiceProvider extends ServiceProvider
 
         $this->setupConfig();
 
-        DomainLocalization::setLocaleGetter(function() use ($app) {
+        DomainLocalization::setLocaleGetter(function () use ($app) {
             return $app->getLocale();
         });
-        DomainLocalization::setLocaleSetter(function($locale) use ($app) {
+        DomainLocalization::setLocaleSetter(function ($locale) use ($app) {
             $app->setLocale($locale);
         });
     }
@@ -28,7 +28,7 @@ class LocalizationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(DomainLocalization::class, function($app) {
+        $this->app->singleton(DomainLocalization::class, function ($app) {
             return new DomainLocalization(
                 $app->getLocale(),
                 config('domain-localization.supported_locales', [])
