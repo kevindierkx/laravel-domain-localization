@@ -17,6 +17,7 @@ For more advanced locale management take a look at [mcamara/laravel-localization
  5.x      | >= 2.0
  6.x      | >= 3.0
  7.x      | >= 4.0
+ 8.x      | >= 4.1
 
 ## Installation
 
