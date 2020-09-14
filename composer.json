@@ -16,7 +16,7 @@
     },
     "require-dev": {
         "orchestra/testbench-browser-kit": "^4.2 || ^5.0 || ^6.0",
-        "distortedfusion/php-cs-fixer-config": "^1.0"
+        "distortedfusion/php-cs-fixer-config": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -29,7 +29,7 @@
         }
     },
     "scripts": {
-        "phpcs-fix" : "php-cs-fixer fix --using-cache=no --rules=-psr0,-psr4 --ansi",
+        "phpcs-fix" : "php-cs-fixer fix --using-cache=no --allow-risky=yes --ansi",
         "phpcs": "php-cs-fixer fix -v --diff --dry-run --allow-risky=yes --ansi",
         "phpunit": "phpunit --coverage-text",
         "test": [
