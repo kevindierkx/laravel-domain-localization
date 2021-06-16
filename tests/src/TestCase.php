@@ -38,7 +38,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Kevindierkx\LaravelDomainLocalization\LocalizationServiceProvider::class,
+            \Kevindierkx\LaravelDomainLocalization\ServiceProvider::class,
         ];
     }
 
@@ -49,7 +49,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
      *
      * @return array
      */
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return [
             'Localization' => \Kevindierkx\LaravelDomainLocalization\Facades\Localization::class,
@@ -76,16 +76,11 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
             'middleware' => [
                 \Kevindierkx\LaravelDomainLocalization\Middleware\SetupLocaleMiddleware::class,
             ],
-        ], function () use ($app) {
+        ], function () use ($app): void {
             $app['router']->get('/test', ['as' => 'test', function () use ($app) {
                 return $app['translator']->get('DomainLocalizationTest::data.native');
             }]);
         });
-    }
-
-    protected function refreshApplication()
-    {
-        parent::refreshApplication();
     }
 
     /**
@@ -110,9 +105,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
         $server = ['CONTENT_TYPE' => 'application/json'],
         $content = null
     ) {
-        $request = new \Illuminate\Http\Request();
-
-        return $request->createFromBase(
+        return \Illuminate\Http\Request::createFromBase(
             \Symfony\Component\HttpFoundation\Request::create(
                 $uri,
                 'GET',

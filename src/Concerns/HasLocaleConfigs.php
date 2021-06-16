@@ -29,7 +29,7 @@ trait HasLocaleConfigs
      *
      * @return void
      */
-    public function addLocale(string $name, array $config)
+    public function addLocale(string $name, array $config): void
     {
         $this->supportedLocales[$name] = $config;
     }

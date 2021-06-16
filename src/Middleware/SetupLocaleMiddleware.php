@@ -3,25 +3,10 @@
 namespace Kevindierkx\LaravelDomainLocalization\Middleware;
 
 use Closure;
-use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
+use Kevindierkx\LaravelDomainLocalization\Facades\Localization;
 
 class SetupLocaleMiddleware
 {
-    /**
-     * @var \Kevindierkx\LaravelDomainLocalization\DomainLocalization
-     */
-    protected $localization;
-
-    /**
-     * Create a new middleware instance.
-     *
-     * @param \Kevindierkx\LaravelDomainLocalization\DomainLocalization $localization
-     */
-    public function __construct(DomainLocalization $localization)
-    {
-        $this->localization = $localization;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -32,10 +17,10 @@ class SetupLocaleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $tld = $this->localization->getTldFromUrl($request->getUri());
+        $tld = Localization::getTldFromUrl($request->getUri());
 
-        if ($locale = $this->localization->getSupportedLocaleNameByTld($tld)) {
-            $this->localization->setCurrentLocale($locale);
+        if ($locale = Localization::getSupportedLocaleNameByTld($tld)) {
+            Localization::setCurrentLocale($locale);
         }
 
         return $next($request);
