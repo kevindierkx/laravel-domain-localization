@@ -273,5 +273,9 @@ Using the helper methods we can create a simple but effective language switcher.
 ...
 ```
 
+## Contributing
+
+Contributions are welcome and will be [fully credited](https://github.com/kevindierkx/laravel-domain-localization/graphs/contributors). Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
 ## License
 The MIT License (MIT). Please see [License File](https://github.com/kevindierkx/laravel-domain-localization/blob/master/LICENSE) for more information.

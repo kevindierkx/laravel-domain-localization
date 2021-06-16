@@ -1,11 +1,12 @@
 /.idea
 /.vscode
-/build
+/coverage
 /phpunit.xml
 /vendor
 .DS_Store
 .php_cs.cache
 .phpunit.result.cache
+clover.xml
 composer.lock
 composer.phar
 Thumbs.db

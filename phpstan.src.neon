@@ -1,0 +1,7 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+parameters:
+    reportUnmatchedIgnoredErrors: true
+    checkMissingIterableValueType: false

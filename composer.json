@@ -1,22 +1,36 @@
 {
     "name": "kevindierkx/laravel-domain-localization",
     "description": "Laravel domain localization",
-    "keywords": ["distortedfusion", "laravel", "domain", "localization"],
     "license": "MIT",
+    "keywords": ["distortedfusion", "laravel", "domain", "localization"],
+    "homepage": "https://github.com/kevindierkx/laravel-domain-localization",
+    "support": {
+        "issues": "https://github.com/kevindierkx/laravel-domain-localization/issues",
+        "source": "https://github.com/kevindierkx/laravel-domain-localization"
+    },
     "authors": [
         {
             "name": "Kevin Dierkx",
             "email": "kevin@distortedfusion.com",
             "homepage": "https://distortedfusion.com"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/kevindierkx/laravel-domain-localization/graphs/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "illuminate/support": "^6.0 || ^7.0 || ^8.0"
+        "php": "^7.4 || ^8.0",
+        "illuminate/support": "^8.0"
     },
     "require-dev": {
-        "orchestra/testbench-browser-kit": "^4.2 || ^5.0 || ^6.0",
-        "distortedfusion/php-cs-fixer-config": "^1.1"
+        "distortedfusion/php-cs-fixer-config": "^1.1",
+        "nunomaduro/larastan": "^0.6.1",
+        "orchestra/testbench-browser-kit": "^6.0",
+        "phpstan/phpstan-phpunit": "^0.12.0",
+        "phpstan/phpstan-strict-rules": "^0.12.0",
+        "phpstan/phpstan": "^0.12.0",
+        "phpunit/phpunit": "^9.3.3"
     },
     "autoload": {
         "psr-4": {
@@ -31,6 +45,12 @@
     "scripts": {
         "phpcs-fix" : "php-cs-fixer fix --using-cache=no --allow-risky=yes --ansi",
         "phpcs": "php-cs-fixer fix -v --diff --dry-run --allow-risky=yes --ansi",
+        "phpstan-src": "phpstan analyse -l max -c phpstan.src.neon src",
+        "phpstan-tests": "phpstan analyse -l max -c phpstan.tests.neon tests",
+        "phpstan": [
+            "@phpstan-src",
+            "@phpstan-tests"
+        ],
         "phpunit": "phpunit --coverage-text",
         "test": [
             "@phpcs",
@@ -52,6 +72,9 @@
                 "Localization": "Kevindierkx\\LaravelDomainLocalization\\Facades\\Localization"
             }
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true

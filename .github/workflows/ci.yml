@@ -1,0 +1,62 @@
+name: CI-CD
+
+on: [push, pull_request]
+
+jobs:
+  php-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4, 8.0]
+        laravel: [8.*]
+        stability: [prefer-stable]
+        composer-flags: ['']
+        experimental: [false]
+
+    continue-on-error: ${{ matrix.experimental }}
+
+    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.stability }})
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest ${{ matrix.composer-flags }}
+
+      - name: Execute PHPCS
+        run: composer phpcs
+        if: ${{ matrix.php != '8.0' }}
+        # @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/4702
+
+      - name: Execute PHPStan
+        run: composer phpstan
+
+      - name: Execute PHPUnit
+        run: vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.clover
+
+      - name: Code coverage
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          bash <(curl -s https://codecov.io/bash)
