@@ -2,6 +2,7 @@
 
 namespace Kevindierkx\LaravelDomainLocalization\Concerns;
 
+use Illuminate\Support\Arr;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
 
 trait HasLocaleConfigs
@@ -28,7 +29,7 @@ trait HasLocaleConfigs
      *
      * @return void
      */
-    public function addLocale($name, array $config)
+    public function addLocale(string $name, array $config)
     {
         $this->supportedLocales[$name] = $config;
     }
@@ -133,7 +134,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getTldForLocale($locale): string
+    public function getTldForLocale(string $locale): string
     {
         return $this->getSupportedLocale($locale)['tld'] ?? 'unknown';
     }
@@ -145,7 +146,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getNameForLocale($locale): string
+    public function getNameForLocale(string $locale): string
     {
         return $this->getSupportedLocale($locale)['name'] ?? 'unknown';
     }
@@ -157,7 +158,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getDirectionForLocale($locale): string
+    public function getDirectionForLocale(string $locale): string
     {
         return $this->getSupportedLocale($locale)['dir'] ?? 'unknown';
     }
@@ -169,7 +170,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getScriptForLocale($locale): string
+    public function getScriptForLocale(string $locale): string
     {
         return $this->getSupportedLocale($locale)['script'] ?? 'unknown';
     }
@@ -181,7 +182,7 @@ trait HasLocaleConfigs
      *
      * @return string
      */
-    public function getNativeForLocale($locale): string
+    public function getNativeForLocale(string $locale): string
     {
         return $this->getSupportedLocale($locale)['native'] ?? 'unknown';
     }
@@ -197,13 +198,11 @@ trait HasLocaleConfigs
      */
     public function getSupportedLocaleNameByTld(string $tld): string
     {
-        foreach ($this->supportedLocales as $key => $config) {
-            if ($this->getTldForLocale($key) === $tld) {
-                return $key;
-            }
-        }
+        $key = Arr::first(array_keys($this->supportedLocales), function ($key) use ($tld) {
+            return $this->getTldForLocale($key) === $tld;
+        });
 
-        throw new UnsupportedLocaleException(sprintf(
+        return $key ?: throw new UnsupportedLocaleException(sprintf(
             'The TLD \'%s\' is not in the `supported_locales` array.',
             $tld
         ));

@@ -3,7 +3,8 @@
 namespace Kevindierkx\LaravelDomainLocalization;
 
 use Closure;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\InvalidUrlException;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
 
@@ -42,18 +43,15 @@ class DomainLocalization
     /**
      * Creates a new domain localization instance.
      *
-     * @param \Illuminate\Config\Repository      $configRepository
-     * @param \Illuminate\Http\Request           $request
-     * @param \Illuminate\Foundation\Application $app
-     * @param string                             $defaultLocale
-     * @param array                              $locales
+     * @param string $defaultLocale
+     * @param array  $locales
      */
     public function __construct(string $defaultLocale, array $locales)
     {
         $this->defaultLocale = $defaultLocale;
 
         foreach ($locales as $name => $config) {
-            $this->addLocale($name, $config);
+            $this->addLocale((string) $name, $config);
         }
 
         if (empty($this->supportedLocales[$defaultLocale])) {
@@ -100,29 +98,28 @@ class DomainLocalization
     /**
      * Get top level domain.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string                   $url
+     * @param string $url
+     *
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\InvalidUrlException
      *
      * @return string
      */
     public function getTldFromUrl(string $url): string
     {
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+        if (! ($host = parse_url($url, PHP_URL_HOST)) || empty($host)) {
             throw new InvalidUrlException(sprintf(
-                'The url \'%s\' could not be parsed, make sure you provide a full URL.',
+                'The url \'%s\' could not be parsed, make sure the provided URL contains a host.',
                 $url
             ));
         }
-
-        $host = parse_url($url, PHP_URL_HOST);
 
         $matchingLocales = $this->resolveMatchingLocales($host);
 
         // When we don't match anything the locale might not be configured.
         // We will default to the last element after the final period.
         return empty($matchingLocales)
-            ? substr(strrchr($host, '.'), 0)
-            : reset($matchingLocales);
+            ? sprintf('.%s', Str::afterLast($host, '.'))
+            : Arr::first($matchingLocales);
     }
 
     /**
@@ -178,7 +175,7 @@ class DomainLocalization
      * @param string      $url
      * @param string|null $key
      *
-     * @throws \Kevindierkx\LaravelDomainLocalization\UnsupportedLocaleException
+     * @throws \Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException
      *
      * @return string
      */

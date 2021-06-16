@@ -11,7 +11,7 @@ return [
      // Based upon mcamara/laravel-localization:
      // https:// github.com/mcamara/laravel-localization/blob/master/src/config/config.php
     'supported_locales' => [
-        'en' => ['tld' => '.com', 'script' => 'Latn', 'dir' => 'ltr', 'name' => 'English',            'native' => 'English'],
+        'en' => ['tld' => '.com', 'script' => 'Latn', 'dir' => 'ltr', 'name' => 'English',               'native' => 'English'],
         // 'en-AU' => ['tld' => '.au',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'Australian English', 'native' => 'Australian English'],
         // 'en-GB' => ['tld' => '.uk',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'British English',    'native' => 'British English'],
         // 'en-US' => ['tld' => '.us',  'script' => 'Latn', 'dir' => 'ltr', 'name' => 'U.S. English',       'native' => 'U.S. English'],
