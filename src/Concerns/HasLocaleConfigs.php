@@ -202,10 +202,14 @@ trait HasLocaleConfigs
             return $this->getTldForLocale($key) === $tld;
         });
 
-        return $key ?: throw new UnsupportedLocaleException(sprintf(
-            'The TLD \'%s\' is not in the `supported_locales` array.',
-            $tld
-        ));
+        if (! $key) {
+            throw new UnsupportedLocaleException(sprintf(
+                'The TLD \'%s\' is not in the `supported_locales` array.',
+                $tld
+            ));
+        }
+
+        return $key;
     }
 
     /**
