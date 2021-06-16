@@ -1,10 +1,9 @@
 # Laravel domain localization
 
 [![Latest Version](https://img.shields.io/github/tag/kevindierkx/laravel-domain-localization.svg?style=flat-square)](https://github.com/kevindierkx/laravel-domain-localization/tags)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/kevindierkx/laravel-domain-localization/blob/master/LICENSE)
-[![Build Status](https://img.shields.io/travis/kevindierkx/laravel-domain-localization.svg?style=flat-square)](https://travis-ci.org/kevindierkx/laravel-domain-localization)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/kevindierkx/laravel-domain-localization.svg?style=flat-square)](https://scrutinizer-ci.com/g/kevindierkx/laravel-domain-localization/)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/kevindierkx/laravel-domain-localization.svg?style=flat-square)](https://scrutinizer-ci.com/g/kevindierkx/laravel-domain-localization/?branch=master)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/kevindierkx/laravel-domain-localization/CI-CD/master?style=flat-square)](https://github.com/kevindierkx/laravel-domain-localization/actions)
+[![Code Coverage](https://img.shields.io/codecov/c/github/kevindierkx/laravel-domain-localization?style=flat-square&token=2L6UCW8F96)](https://codecov.io/gh/kevindierkx/laravel-domain-localization)
 
 A tool for easy i18n domain based localization in Laravel applications.
 
@@ -12,12 +11,13 @@ For more advanced locale management take a look at [mcamara/laravel-localization
 
 ## Version Compatibility
 
- Laravel  | Package
-:---------|:----------
- 5.x      | >= 2.0
- 6.x      | >= 3.0
- 7.x      | >= 4.0
- 8.x      | >= 4.1
+| Laravel | PHP            | Package |
+| ------- | -------------- | ------- |
+| 5.x     | ^7.1           | >= 2.0  |
+| 6.x     | ^7.2           | >= 3.0  |
+| 7.x     | ^7.2           | >= 4.0  |
+| 8.x     | ^7.2           | >= 4.1  |
+| 8.x     | ^7.4 \|\| ^8.0 | >= 4.2  |
 
 ## Installation
 
