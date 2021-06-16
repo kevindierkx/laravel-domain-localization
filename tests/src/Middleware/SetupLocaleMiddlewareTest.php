@@ -7,7 +7,7 @@ use Localization;
 
 class SetupLocaleMiddlewareTest extends TestCase
 {
-    public function test_middleware_switches_between_locales_during_request()
+    public function testMiddlewareSwitchesBetweenLocalesDuringRequest()
     {
         Localization::addLocale('nl', self::TEST_NL_CONFIG);
 

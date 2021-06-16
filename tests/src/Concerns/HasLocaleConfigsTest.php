@@ -8,128 +8,128 @@ use Localization;
 
 class HasLocaleConfigsTest extends TestCase
 {
-    public function test_adding_locales()
+    public function testAddingLocales()
     {
         $this->assertFalse(Localization::hasSupportedLocale('nl'));
         Localization::addLocale('nl', self::TEST_NL_CONFIG);
         $this->assertTrue(Localization::hasSupportedLocale('nl'));
     }
 
-    public function test_listing_all_locales()
+    public function testListingAllLocales()
     {
         $this->assertSame(Localization::getSupportedLocales(), ['en' => self::TEST_EN_CONFIG]);
     }
 
-    public function test_listing_a_locale_by_name()
+    public function testListingALocaleByName()
     {
         $this->assertSame(Localization::getSupportedLocale('en'), self::TEST_EN_CONFIG);
     }
 
-    public function test_listing_an_unknown_locale_by_name_throws_an_exception()
+    public function testListingAnUnknownLocaleByNameThrowsAnException()
     {
         $this->expectException(UnsupportedLocaleException::class);
 
         Localization::getSupportedLocale('foo');
     }
 
-    public function test_getting_the_tld_for_the_current_locale()
+    public function testGettingTheTldForTheCurrentLocale()
     {
         $this->assertSame(Localization::getTldForCurrentLocale(), '.com');
     }
 
-    public function test_getting_the_name_for_the_current_locale()
+    public function testGettingTheNameForTheCurrentLocale()
     {
         $this->assertSame(Localization::getNameForCurrentLocale(), 'English');
     }
 
-    public function test_getting_the_direction_for_the_current_locale()
+    public function testGettingTheDirectionForTheCurrentLocale()
     {
         $this->assertSame(Localization::getDirectionForCurrentLocale(), 'ltr');
     }
 
-    public function test_getting_the_script_for_the_current_locale()
+    public function testGettingTheScriptForTheCurrentLocale()
     {
         $this->assertSame(Localization::getScriptForCurrentLocale(), 'Latn');
     }
 
-    public function test_getting_the_native_for_the_current_locale()
+    public function testGettingTheNativeForTheCurrentLocale()
     {
         $this->assertSame(Localization::getNativeForCurrentLocale(), 'English');
     }
 
-    public function test_getting_the_tld_for_a_specific_locale()
+    public function testGettingTheTldForASpecificLocale()
     {
         $this->assertSame(Localization::getTldForLocale('en'), '.com');
     }
 
-    public function test_getting_unknown_as_the_tld_for_a_specific_locale()
+    public function testGettingUnknownAsTheTldForASpecificLocale()
     {
         Localization::addLocale('unknown', []);
         $this->assertSame(Localization::getTldForLocale('unknown'), 'unknown');
     }
 
-    public function test_getting_the_name_for_a_specific_locale()
+    public function testGettingTheNameForASpecificLocale()
     {
         $this->assertSame(Localization::getNameForLocale('en'), 'English');
     }
 
-    public function test_getting_unknown_as_the_name_for_a_specific_locale()
+    public function testGettingUnknownAsTheNameForASpecificLocale()
     {
         Localization::addLocale('unknown', []);
         $this->assertSame(Localization::getNameForLocale('unknown'), 'unknown');
     }
 
-    public function test_getting_the_direction_for_a_specific_locale()
+    public function testGettingTheDirectionForASpecificLocale()
     {
         $this->assertSame(Localization::getDirectionForLocale('en'), 'ltr');
     }
 
-    public function test_getting_unknown_as_the_direction_for_a_specific_locale()
+    public function testGettingUnknownAsTheDirectionForASpecificLocale()
     {
         Localization::addLocale('unknown', []);
         $this->assertSame(Localization::getDirectionForLocale('unknown'), 'unknown');
     }
 
-    public function test_getting_the_script_for_a_specific_locale()
+    public function testGettingTheScriptForASpecificLocale()
     {
         $this->assertSame(Localization::getScriptForLocale('en'), 'Latn');
     }
 
-    public function test_getting_unknown_as_the_script_for_a_specific_locale()
+    public function testGettingUnknownAsTheScriptForASpecificLocale()
     {
         Localization::addLocale('unknown', []);
         $this->assertSame(Localization::getScriptForLocale('unknown'), 'unknown');
     }
 
-    public function test_getting_the_native_for_a_specific_locale()
+    public function testGettingTheNativeForASpecificLocale()
     {
         $this->assertSame(Localization::getNativeForLocale('en'), 'English');
     }
 
-    public function test_getting_unknown_as_the_native_for_a_specific_locale()
+    public function testGettingUnknownAsTheNativeForASpecificLocale()
     {
         Localization::addLocale('unknown', []);
         $this->assertSame(Localization::getNativeForLocale('unknown'), 'unknown');
     }
 
-    public function test_getting_the_supported_locale_name_by_tld()
+    public function testGettingTheSupportedLocaleNameByTld()
     {
         $this->assertSame(Localization::getSupportedLocaleNameByTld('.com'), 'en');
     }
 
-    public function test_getting_an_unknown_locale_name_by_tld_throws_an_exception()
+    public function testGettingAnUnknownLocaleNameByTldThrowsAnException()
     {
         $this->expectException(UnsupportedLocaleException::class);
 
         Localization::getSupportedLocaleNameByTld('.foo');
     }
 
-    public function test_getting_the_supported_locale_by_tld()
+    public function testGettingTheSupportedLocaleByTld()
     {
         $this->assertSame(Localization::getSupportedLocaleByTld('.com'), self::TEST_EN_CONFIG);
     }
 
-    public function test_having_a_supported_locale_by_tld()
+    public function testHavingASupportedLocaleByTld()
     {
         $this->assertSame(Localization::hasSupportedLocaleByTld('.com'), true);
         $this->assertSame(Localization::hasSupportedLocaleByTld('.dev'), false);

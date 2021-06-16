@@ -9,43 +9,43 @@ use Localization;
 
 class DomainLocalizationTest extends TestCase
 {
-    public function test_not_having_the_default_locale_in_the_supported_locales_throws_an_exception()
+    public function testNotHavingTheDefaultLocaleInTheSupportedLocalesThrowsAnException()
     {
         $this->expectException(UnsupportedLocaleException::class);
 
         new DomainLocalization('foo', []);
     }
 
-    public function test_getting_default_locale_matches_the_app_locale()
+    public function testGettingDefaultLocaleMatchesTheAppLocale()
     {
         $this->assertSame(Localization::getDefaultLocale(), $this->app['config']->get('app.locale'));
     }
 
-    public function test_getting_the_current_locale_matches_the_app_locale()
+    public function testGettingTheCurrentLocaleMatchesTheAppLocale()
     {
         $this->assertSame(Localization::getCurrentLocale(), 'en');
     }
 
-    public function test_setting_the_current_locale_matches_the_app_locale()
+    public function testSettingTheCurrentLocaleMatchesTheAppLocale()
     {
         Localization::setCurrentLocale('foo');
 
         $this->assertSame($this->app['config']->get('app.locale'), 'foo');
     }
 
-    public function test_getting_the_tld_matches_the_correct_tld_from_the_supported_locales()
+    public function testGettingTheTldMatchesTheCorrectTldFromTheSupportedLocales()
     {
         Localization::addLocale('custom', ['tld' => self::TEST_TLD_CUSTOM]);
 
         $this->assertSame(Localization::getTldFromUrl('https://example'.self::TEST_TLD_CUSTOM.'/test'), self::TEST_TLD_CUSTOM);
     }
 
-    public function test_getting_the_tld_matches_the_fallback_and_not_an_incorrect_tld_when_the_tld_is_not_exactly_in_the_supported_locales()
+    public function testGettingTheTldMatchesTheFallbackAndNotAnIncorrectTldWhenTheTldIsNotExactlyInTheSupportedLocales()
     {
         $this->assertSame(Localization::getTldFromUrl('https://example'.self::TEST_TLD_CUSTOM.'/test'), '.dev');
     }
 
-    public function test_getting_the_tld_from_an_incorrect_url_throws_an_exception()
+    public function testGettingTheTldFromAnIncorrectUrlThrowsAnException()
     {
         $this->expectException(InvalidUrlException::class);
 
@@ -59,7 +59,7 @@ class DomainLocalizationTest extends TestCase
      *
      * @dataProvider getCompareDataProvider
      */
-    public function test_compare_to_always_favor_the_longest_string(string $a, string $b, bool $isPositive)
+    public function testCompareToAlwaysFavorTheLongestString(string $a, string $b, bool $isPositive)
     {
         $class = new \ReflectionClass(DomainLocalization::class);
         $method = $class->getMethod('compareStrLength');
@@ -77,14 +77,14 @@ class DomainLocalizationTest extends TestCase
         ];
     }
 
-    public function test_getting_localized_url()
+    public function testGettingLocalizedUrl()
     {
         Localization::addLocale('nl', self::TEST_NL_CONFIG);
 
         $this->assertSame(Localization::getLocalizedUrl(self::TEST_URL_EN.'/test', 'nl'), self::TEST_URL_NL.'/test');
     }
 
-    public function test_getting_unknown_localized_url_throws_an_exception()
+    public function testGettingUnknownLocalizedUrlThrowsAnException()
     {
         $this->expectException(UnsupportedLocaleException::class);
 
