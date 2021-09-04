@@ -1,0 +1,4 @@
+- [Introduction](/docs/{{repository}}/introduction)
+- [Installation](/docs/{{repository}}/installation)
+- [Usage](/docs/{{repository}}/usage)
+- [Creating a language selector](/docs/{{repository}}/creating-a-language-selector)
