@@ -14,17 +14,11 @@ class SetupLocaleMiddlewareTest extends TestCase
         $crawler = $this->call('GET', self::TEST_URL_EN.'/test');
 
         self::assertResponseOk();
-        self::assertEquals(
-            'English',
-            $crawler::getContent()
-        );
+        $crawler->assertSee('English');
 
         $crawler = $this->call('GET', self::TEST_URL_NL.'/test');
 
         self::assertResponseOk();
-        self::assertEquals(
-            'Nederlands',
-            $crawler::getContent()
-        );
+        $crawler->assertSee('Nederlands');
     }
 }
