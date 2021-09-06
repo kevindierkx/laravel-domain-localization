@@ -30,7 +30,7 @@ php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\Loc
 
 The config file will be published to `config/domain-localization.php` in your application directory. Please refer to the [config file](https://github.com/kevindierkx/laravel-domain-localization/blob/master/config/domain-localization.php) for an overview of the available options.
 
-*Please note:* When a desired locale isn't present in the supported locales config an exception will be thrown.
+**Please note:** When a desired locale isn't present in the supported locales config an exception will be thrown.
 
 ## Setup Middleware
 
@@ -50,4 +50,4 @@ https://example.com
 https://example.nl
 ```
 
-*Please note:* It is not required to use the middleware on all routes. The `Localization` service provides a variety of helper methods to resolve a matching locale from an URL.
+**Please note:** It is not required to use the middleware on all routes. The `Localization` service provides a variety of helper methods to resolve a matching locale from an URL.

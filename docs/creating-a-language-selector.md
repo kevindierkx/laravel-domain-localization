@@ -2,8 +2,7 @@
 
 Using the helper methods we can create a simple but effective language switcher. The example below uses a [Bootstrap dropdown](https://getbootstrap.com/docs/3.4/components/#dropdowns).
 
-```html
-...
+```php
 <ul class="nav navbar-nav">
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -20,5 +19,4 @@ Using the helper methods we can create a simple but effective language switcher.
         </ul>
     </li>
 </ul>
-...
 ```

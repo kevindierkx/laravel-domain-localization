@@ -2,7 +2,7 @@
 
 The package provides some useful helper methods. For a full list of methods and method descriptions please refer to the [`DomainLocalization::class`](https://github.com/kevindierkx/laravel-domain-localization/blob/master/src/DomainLocalization.php).
 
-*Please note:* By default the `Localization` facade will be registered during package discovery. In the following examples we will use this facade directly.
+**Please note:** By default the `Localization` facade will be registered during package discovery. In the following examples we will use this facade directly.
 
 ### Get the localized URL
 
@@ -128,7 +128,7 @@ Would return:
 true
 ```
 
-*Please note:* For this to work `.com.local` needs to be registered as TLD in the supported locales config. This is very effective during development where you can't point multiple domains to your local machine.
+**Please note:** For this to work `.com.local` needs to be registered as TLD in the supported locales config. This is very effective during development where you can't point multiple domains to your local machine.
 
 ### Get attributes from locales
 
