@@ -16,7 +16,7 @@ class SetupLocaleMiddlewareTest extends TestCase
         self::assertResponseOk();
         self::assertEquals(
             'English',
-            $crawler->getContent()
+            $crawler::getContent()
         );
 
         $crawler = $this->call('GET', self::TEST_URL_NL.'/test');
@@ -24,7 +24,7 @@ class SetupLocaleMiddlewareTest extends TestCase
         self::assertResponseOk();
         self::assertEquals(
             'Nederlands',
-            $crawler->getContent()
+            $crawler::getContent()
         );
     }
 }
