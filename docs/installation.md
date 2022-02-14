@@ -17,6 +17,7 @@ composer require kevindierkx/laravel-domain-localization
 | 7.x     | ^7.2           | >= 4.0  |
 | 8.x     | ^7.2           | >= 4.1  |
 | 8.x     | ^7.4 \|\| ^8.0 | >= 4.2  |
+| 9.x     | ^8.0           | >= 5.0  |
 
 ## Configuration
 
@@ -25,7 +26,7 @@ Supported locales are defined in the package configuration file. Desired locales
 In order to edit the default configuration you need to publish the package configuration to your application config directory:
 
 ```bash
-php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\LocalizationServiceProvider"
+php artisan vendor:publish --provider="Kevindierkx\LaravelDomainLocalization\ServiceProvider"
 ```
 
 The config file will be published to `config/domain-localization.php` in your application directory. Please refer to the [config file](https://github.com/kevindierkx/laravel-domain-localization/blob/master/config/domain-localization.php) for an overview of the available options.

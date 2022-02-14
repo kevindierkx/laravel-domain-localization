@@ -9,8 +9,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [7.4, 8.0]
-        laravel: [8.*]
+        php: [8.0]
+        laravel: [9.*]
         stability: [prefer-stable]
         composer-flags: ['']
         experimental: [false]
@@ -47,8 +47,6 @@ jobs:
 
       - name: Execute PHPCS
         run: composer phpcs
-        if: ${{ matrix.php != '8.0' }}
-        # @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/4702
 
       - name: Execute PHPStan
         run: composer phpstan

@@ -3,7 +3,6 @@
 namespace Kevindierkx\LaravelDomainLocalization;
 
 use Closure;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\InvalidUrlException;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
@@ -78,7 +77,10 @@ class DomainLocalization
      */
     public function getCurrentLocale(): string
     {
-        return call_user_func(static::$localeGetter);
+        /** @var string */
+        $configuredLocale = call_user_func(static::$localeGetter);
+
+        return $configuredLocale;
     }
 
     /**
@@ -106,7 +108,7 @@ class DomainLocalization
      */
     public function getTldFromUrl(string $url): string
     {
-        if (! ($host = parse_url($url, PHP_URL_HOST)) || empty($host)) {
+        if (! ($host = parse_url($url, PHP_URL_HOST))) {
             throw new InvalidUrlException(sprintf(
                 'The url \'%s\' could not be parsed, make sure the provided URL contains a host.',
                 $url
@@ -117,9 +119,11 @@ class DomainLocalization
 
         // When we don't match anything the locale might not be configured.
         // We will default to the last element after the final period.
-        return empty($matchingLocales)
-            ? sprintf('.%s', Str::afterLast($host, '.'))
-            : Arr::first($matchingLocales);
+        if (empty($matchingLocales)) {
+            return sprintf('.%s', Str::afterLast($host, '.'));
+        }
+
+        return $matchingLocales[0];
     }
 
     /**

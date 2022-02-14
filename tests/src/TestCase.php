@@ -4,15 +4,15 @@ namespace Kevindierkx\LaravelDomainLocalization\Tests;
 
 abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
 {
-    const TEST_URL_EN = 'https://test.com';
+    public const TEST_URL_EN = 'https://test.com';
 
-    const TEST_URL_NL = 'https://test.nl';
+    public const TEST_URL_NL = 'https://test.nl';
 
-    const TEST_TLD_CUSTOM = '.com.dev';
+    public const TEST_TLD_CUSTOM = '.com.dev';
 
-    const TEST_HTTP_HOST = 'test.local.dev';
+    public const TEST_HTTP_HOST = 'test.local.dev';
 
-    const TEST_EN_CONFIG = [
+    public const TEST_EN_CONFIG = [
         'tld' => '.com',
         'script' => 'Latn',
         'dir' => 'ltr',
@@ -20,7 +20,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
         'native' => 'English',
     ];
 
-    const TEST_NL_CONFIG = [
+    public const TEST_NL_CONFIG = [
         'tld' => '.nl',
         'script' => 'Latn',
         'dir' => 'ltr',
@@ -33,7 +33,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
      *
      * @param \Illuminate\Foundation\Application $app
      *
-     * @return array
+     * @return array<int, class-string>
      */
     protected function getPackageProviders($app)
     {
@@ -47,7 +47,7 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
      *
      * @param \Illuminate\Foundation\Application $app
      *
-     * @return array
+     * @return array<string, class-string>
      */
     protected function getPackageAliases($app): array
     {
@@ -86,13 +86,13 @@ abstract class TestCase extends \Orchestra\Testbench\BrowserKit\TestCase
     /**
      * Create fake request.
      *
-     * @param string $uri
-     * @param string $method
-     * @param array  $parameters
-     * @param array  $cookies
-     * @param array  $files
-     * @param array  $server
-     * @param mixed  $content
+     * @param string               $uri
+     * @param string               $method
+     * @param array                $parameters
+     * @param array                $cookies
+     * @param array                $files
+     * @param array                $server
+     * @param resource|string|null $content
      *
      * @return \Illuminate\Http\Request
      */

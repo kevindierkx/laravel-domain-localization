@@ -198,6 +198,7 @@ trait HasLocaleConfigs
      */
     public function getSupportedLocaleNameByTld(string $tld): string
     {
+        /** @var string */
         $key = Arr::first(array_keys($this->supportedLocales), function ($key) use ($tld) {
             return $this->getTldForLocale($key) === $tld;
         });
