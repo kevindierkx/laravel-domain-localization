@@ -1,4 +1,6 @@
-# Creating a language selector
+# Examples
+
+## Creating a language selector
 
 Using the helper methods we can create a simple but effective language switcher. The example below uses a [Bootstrap dropdown](https://getbootstrap.com/docs/3.4/components/#dropdowns).
 

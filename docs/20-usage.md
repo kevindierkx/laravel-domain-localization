@@ -4,7 +4,7 @@ The package provides some useful helper methods. For a full list of methods and 
 
 **Please note:** By default the `Localization` facade will be registered during package discovery. In the following examples we will use this facade directly.
 
-### Get the localized URL
+## Get the localized URL
 
 By providing a valid URL and the desired locale you can automatically create a localized URL:
 
@@ -18,7 +18,7 @@ Would return:
 https://example.nl/page
 ```
 
-### Listing supported locale configs
+## Listing supported locale configs
 
 You can either list all configured locales:
 
@@ -68,7 +68,7 @@ Would return:
 true
 ```
 
-### Resolving locale configs by TLD
+## Resolving locale configs by TLD
 
 Instead of directly using the locale name to resolve a configuration you can also use the TLD:
 
@@ -112,7 +112,7 @@ Would return:
 true
 ```
 
-### Resolving the TLD from an URL
+## Resolving the TLD from an URL
 
 Preferably you wouldn't parse the URL without a lookup table to resolve the TLD. This due to the unusual format of some TLDs. A great package for parsing domains is [jeremykendall/php-domain-parser](https://github.com/jeremykendall/php-domain-parser).
 
@@ -130,7 +130,7 @@ true
 
 **Please note:** For this to work `.com.local` needs to be registered as TLD in the supported locales config. This is very effective during development where you can't point multiple domains to your local machine.
 
-### Get attributes from locales
+## Get attributes from locales
 
 For the current locale or a specific locale you can resolve various configuration attributes using the following helpers:
 
@@ -160,7 +160,7 @@ Would return:
 'English'
 ```
 
-### Modifying the active locale
+## Modifying the active locale
 
 When not using the middleware you might want to change the active locale manually:
 
