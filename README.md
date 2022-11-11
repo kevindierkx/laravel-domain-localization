@@ -9,9 +9,9 @@ A tool for easy i18n domain based localization in Laravel applications.
 
 For more advanced locale management take a look at [mcamara/laravel-localization](https://github.com/mcamara/laravel-localization).
 
-## Installation
+## Documentation
 
-This package offers a wide variety of support for various Laravel versions. You can find the installation instructions, including a compatibility chart and full documentation on https://distortedfusion.com/docs/kevindierkx/laravel-domain-localization.
+You will find full documentation on the dedicated [documentation](https://distortedfusion.com/docs/kevindierkx/laravel-domain-localization) site.
 
 ## Testing
 
