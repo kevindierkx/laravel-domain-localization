@@ -6,6 +6,7 @@ use Kevindierkx\LaravelDomainLocalization\DomainLocalization;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\InvalidUrlException;
 use Kevindierkx\LaravelDomainLocalization\Exceptions\UnsupportedLocaleException;
 use Kevindierkx\LaravelDomainLocalization\Facades\Localization;
+use ReflectionClass;
 
 class DomainLocalizationTest extends TestCase
 {
@@ -61,7 +62,7 @@ class DomainLocalizationTest extends TestCase
      */
     public function testCompareToAlwaysFavorTheLongestString(string $a, string $b, bool $isPositive): void
     {
-        $class = new \ReflectionClass(DomainLocalization::class);
+        $class = new ReflectionClass(DomainLocalization::class);
         $method = $class->getMethod('compareStrLength');
         $method->setAccessible(true);
 
