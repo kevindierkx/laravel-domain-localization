@@ -1,13 +1,18 @@
 {
     "name": "kevindierkx/laravel-domain-localization",
     "description": "Laravel domain localization",
-    "license": "MIT",
-    "keywords": ["distortedfusion", "laravel", "domain", "localization"],
     "homepage": "https://github.com/kevindierkx/laravel-domain-localization",
     "support": {
         "issues": "https://github.com/kevindierkx/laravel-domain-localization/issues",
         "source": "https://github.com/kevindierkx/laravel-domain-localization"
     },
+    "license": "MIT",
+    "keywords": [
+        "distortedfusion",
+        "laravel",
+        "domain",
+        "localization"
+    ],
     "authors": [
         {
             "name": "Kevin Dierkx",
@@ -25,10 +30,10 @@
     },
     "require-dev": {
         "distortedfusion/php-cs-fixer-config": "^2.0",
-        "nunomaduro/larastan": "^2.0",
-        "orchestra/testbench-browser-kit": "^7.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpstan/phpstan-strict-rules": "^1.1",
+        "nunomaduro/larastan": "^2.4",
+        "orchestra/testbench-browser-kit": "^8.0",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "phpstan/phpstan-strict-rules": "^1.4",
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
