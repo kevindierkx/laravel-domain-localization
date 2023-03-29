@@ -18,12 +18,10 @@ composer require kevindierkx/laravel-domain-localization
 
 | Laravel | PHP            | Package |
 | ------- | -------------- | ------- |
-| 5.x     | ^7.1           | >= 2.0  |
-| 6.x     | ^7.2           | >= 3.0  |
-| 7.x     | ^7.2           | >= 4.0  |
-| 8.x     | ^7.2           | >= 4.1  |
-| 8.x     | ^7.4 \|\| ^8.0 | >= 4.2  |
 | 9.x     | ^8.0           | >= 5.0  |
+| 10.x    | ^8.1           | >= 5.1  |
+
+*Only the currently supported PHP versions are listed. Please [refer to previous releases of this package](https://github.com/kevindierkx/laravel-domain-localization/tags) for support for older PHP or Laravel versions.*
 
 ## Configuration
 
