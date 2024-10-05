@@ -11,7 +11,7 @@ For more advanced locale management take a look at [mcamara/laravel-localization
 
 ## Documentation
 
-You will find full documentation on the dedicated [documentation](https://distortedfusion.com/docs/kevindierkx/laravel-domain-localization) site.
+You will find full documentation on the dedicated [documentation](https://distortedfusion.com/docs/kevindierkx/laravel-domain-localization/getting-started) site.
 
 ## Testing
 
